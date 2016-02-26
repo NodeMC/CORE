@@ -1,0 +1,39 @@
+{
+  "name": "nodemc",
+  "version": "1.0.0",
+  "description": "minecraft server control panel made in nodejs",
+  "main": "Main.js",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "cookie-parser": "^1.4.0",
+    "epipebomb": "^0.1.1",
+    "express": "^4.13.3",
+    "external-ip": "^0.2.4",
+    "file-stream-rotator": "0.0.6",
+    "ip": "^1.1.0",
+    "morgan": "^1.6.1",
+    "mysql": "^2.10.0",
+    "ncp": "^2.0.0",
+    "properties-reader": "0.0.13"
+  },
+  "devDependencies": {
+    "nexe": "^1.1.0"
+  },
+  "scripts": {
+    "test": "node Main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/bladesimmer/nodemc.git"
+  },
+  "keywords": [
+    "nodejs",
+    "minecraft"
+  ],
+  "author": "Gabriel Simmer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/bladesimmer/nodemc/issues"
+  },
+  "homepage": "https://gitlab.com/bladesimmer/nodemc#README"
+}
