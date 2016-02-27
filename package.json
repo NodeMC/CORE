@@ -14,7 +14,8 @@
     "morgan": "^1.6.1",
     "mysql": "^2.10.0",
     "ncp": "^2.0.0",
-    "properties-reader": "0.0.13"
+    "properties-reader": "0.0.13",
+    "request": "^2.69.0"
   },
   "devDependencies": {
     "nexe": "^1.1.0"

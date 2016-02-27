@@ -224,7 +224,9 @@ if (serverOptions != null && !serverOptions.firstrun) {
         console.log("Using fallback options! Check your properties.json.")
     }
     // ---
-} else {}
+} else {
+    console.log("Error!");
+}
 
 // App post/get request handlers (API)
 
