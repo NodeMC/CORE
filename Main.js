@@ -71,7 +71,7 @@ try {
     var ram = serverOptions['ram'];
     var PORT = serverOptions['port'];
     var mcport = serverOptions['minecraft_port'];
-    var jarfile = '/var/nodemc/server_files/' + serverOptions['jar'] + '.' + serverOptions['version'] + '.jar';
+    var jarfile = '/var/nodemc/jarfiles/' + serverOptions['jar'] + '.' + serverOptions['version'] + '.jar';
     usingfallback = false;
 } catch (e) { // Fallback options
     console.log(e);
@@ -79,7 +79,7 @@ try {
     var ram = '512M';
     var PORT = 3000;
     var mcport = 25565;
-    var jarfile = '/var/nodemc/server_files/vanilla.latest.jar';
+    var jarfile = '/var/nodemc/jarfiles/vanilla.latest.jar';
     usingfallback = true;
 }
 var outsideip;
