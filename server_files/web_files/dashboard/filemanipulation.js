@@ -62,6 +62,7 @@ $(function() {
         $.post(
             "/savefile", {
                 'File': filename,
+                apikey: key,
                 'Contents': $('#fc').val()
             },
             function(result) {
