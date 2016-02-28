@@ -23,7 +23,7 @@ var FileStreamRotator = require('file-stream-rotator');
 // ---
 
 // Set variables for the server(s)
-var current = 140;
+var current = 142;
 var dir = ".";
 var properties = [];
 var files = "";
@@ -214,7 +214,7 @@ function log(data) { // Log (dump) server output to variable
 
 if (serverOptions != null && !serverOptions.firstrun) {
     // Start then restart server for things to take effect
-    checkVersion();
+    //checkVersion();
     console.log("Starting server...");
     startServer();
     setport();
@@ -275,7 +275,7 @@ app.post('/fr_setup', function(request, response) {
         if (details.minecraft_port == null) {
             details.port = 25565;
         }
-        
+
         response.send(JSON.stringify({
             sucess: true
         }));
@@ -462,6 +462,20 @@ app.post('/stopserver', function(request, response) { // Stop server
         }
     } else {
         response.send("Invalid API key");
+    }
+});
+
+app.delete('/deletefile', function(request, response) {
+    if (checkAPIKey(request.body.apikey) == true) {
+        var item = request.body.file;
+        console.log(item);
+        fs.unlink(item, function(err){
+               if (err) throw err;
+               console.log(item + " deleted");
+               response.send("true");
+          });
+    } else {
+        response.send("false");
     }
 });
 

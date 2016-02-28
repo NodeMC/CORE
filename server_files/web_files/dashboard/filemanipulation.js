@@ -23,8 +23,8 @@ function file() {
                                 var download = encodeURIComponent(filename + "/" + list['files'][i]);
                                 //console.log(list['files'][i]);
                                 html = html + '<tr><td><a class="btn" href="/edit.html#' + filename + "/" + list['files'][i] +
-                                    '">' + list['files'][i] + '</td><td><a class="btn" href="/download/' + download + '">Download <a href="#" class="btn" onclick="delete(' +
-                                    list['files'][i] + ')">Delete</td></tr>'
+                                    '">' + list['files'][i] + '</td><td><a class="btn" href="/download/' + download + '">Download <a href="#" class="btn" onclick="rm(&quot;' +
+                                    list['files'][i] + '&quot;)">Delete</td></tr>'
                             }
                         }
                         html = html + "</tbody></table>";
@@ -76,3 +76,23 @@ window.onhashchange = function() {
     window.location.reload();
 }
 file();
+
+function rm(name) { // Function for deleting files
+    console.log("Attempting to delete " + name);
+    $.ajax({
+        type: "DELETE",        
+        url: "/deletefile",
+        data: {
+            file: name,
+            apikey: key
+        },
+        success: function(res) {
+            console.log(res)
+            if (res == true) {
+                console.log("Deleted!");
+            } else {
+                console.log("Error");
+            }
+        }
+    });
+}
