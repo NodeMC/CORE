@@ -1,7 +1,7 @@
 # NodeMC-CORE
 
-**I KNOW ABOUT THE EPIPE ISSUE! I AM ATTEMPTING TO FIND A FIX. MEANWHILE,
-ENJOY THE SOURCE CODE, CREATE A PULL REQUEST IF YOU FIND A FIX!**
+**Make sure you own the directory jarfiles save to, or 
+else you will encounter a `EPIPE` error!**
 
 ## About
 
@@ -91,5 +91,5 @@ nexe -i Main.js -o NodeMC
 nexe -i Main.js -o NodeMC.exe
 ```
 
-You must include both the `server_files` and `server.properties` with your
-distributed binary.
+You must include both the `server_files` and `server.properties`
+(`server.properties` can be blank) with your distributed binary.
