@@ -22,11 +22,12 @@
 
 <body>
     <div class="centered">
-        <h1 class="head">Directory to store jar files</h1>
-        <h3 class="tip">Where should NodeMC download server jar files?</h3>
-        <h4 class="sm_tip">Should be a directory you have full permissions for.</h4>
-        <input type="text" class="form-control" id="directory" placeholder="/home/user/.nodemc/jarfiles"> <br />
-        <a class="btn btn-primary btn-large pull-right" onclick="set_directory()" href="/step/5.html">Next ></a>
+        <h1 class="head">Minecraft server version.</h1>
+        <h3 class="tip">Jarfiles located in <code>/var/nodemc/jarfiles/</code>.</h3>
+        <input type="text" class="form-control" id="version" placeholder="Version (1.8.9)"> <br />
+        <h5 class="sm_tip">Case sensitve.</h5>        
+        <input type="text" class="form-control" id="flavour" placeholder="Flavour (vanilla)"> <br />
+        <a class="btn btn-primary btn-large pull-right" onclick="set_jarfile()" href="/step/confirm.html">Next ></a>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

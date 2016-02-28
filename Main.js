@@ -71,7 +71,8 @@ try {
     var ram = serverOptions['ram'];
     var PORT = serverOptions['port'];
     var mcport = serverOptions['minecraft_port'];
-    var jarfile = '/var/nodemc/jarfiles/' + serverOptions['jar'] + '.' + serverOptions['version'] + '.jar';
+    var jardir = serverOptions['jarfile_directory'];
+    var jarfile = jardir + serverOptions['jar'] + '.' + serverOptions['version'] + '.jar';
     usingfallback = false;
 } catch (e) { // Fallback options
     console.log(e);
@@ -79,7 +80,7 @@ try {
     var ram = '512M';
     var PORT = 3000;
     var mcport = 25565;
-    var jarfile = '/var/nodemc/jarfiles/vanilla.latest.jar';
+    var jarfile = '';
     usingfallback = true;
 }
 var outsideip;
@@ -224,9 +225,7 @@ if (serverOptions != null && !serverOptions.firstrun) {
         console.log("Using fallback options! Check your properties.json.")
     }
     // ---
-} else {
-    console.log("Error!");
-}
+} else {}
 
 // App post/get request handlers (API)
 
@@ -265,11 +264,18 @@ app.post('/fr_setup', function(request, response) {
             'port': parseInt(request.body.nmc_port),
             'minecraft_port': parseInt(request.body.mc_port),
             'ram': parseInt(request.body.memory) + "M",
+            'jarfile_directory': request.body.directory,
             'jar': request.body.flavour,
             'version': request.body.version,
             'firstrun': false
         }
-
+        if (details.port == null) {
+            details.port = 3000;
+        }
+        if (details.minecraft_port == null) {
+            details.port = 25565;
+        }
+        
         response.send(JSON.stringify({
             sucess: true
         }));
@@ -280,15 +286,15 @@ app.post('/fr_setup', function(request, response) {
         //Download server jarfile
         if (details.jar == "vanilla") {
             getfile('https://s3.amazonaws.com/Minecraft.Download/versions/' + details.version + '/minecraft_server.' + details.version + '.jar')
-                .pipe(fs.createWriteStream('/var/nodemc/jarfiles/' + details.jar + "." + details.version + ".jar"));
+                .pipe(fs.createWriteStream(details.jarfile_directory + details.jar + "." + details.version + ".jar"));
         }
         if (details.jar == "spigot") {
             getfile('https://tcpr.ca/files/spigot/spigot-' + details.version + '-R0.1-SNAPSHOT-latest.jar')
-                .pipe(fs.createWriteStream('/var/nodemc/jarfiles/' + details.jar + "." + details.version + ".jar"));
+                .pipe(fs.createWriteStream(details.jarfile_directory + details.jar + "." + details.version + ".jar"));
         }
         if (details.jar != "spigot" && details.jar != "vanilla") {
             console.log("Unknown server jar " + details.jar + " - " + details.version + ".");
-            console.log("You will need to manually download your jarfile and place it in /var/nodemc/jarfiles/.");
+            console.log("You will need to manually download your jarfile and place it in " + jardir);
         }
 
         fs.writeFile("./server_files/properties.json", options, function(err) {
@@ -296,9 +302,7 @@ app.post('/fr_setup', function(request, response) {
                 return console.log("Something went wrong!");
             } else {
                 console.log("New admin settings saved.");
-                setTimeout(function() {
-                    process.exit(0);
-                }, 2000);
+                console.log("You can use CTRL+C to stop the server.");
             }
         });
     } else {

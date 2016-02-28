@@ -1,5 +1,6 @@
 var filename = window.location.hash.substr(1);
 var key = getApiKey();
+var editor;
 
 function file() {
     $(function() {
@@ -44,7 +45,7 @@ function file() {
                     var fc = result;
                     $('#fc').val(fc);
                     var myTextArea = document.getElementById('fc');
-                    var myCodeMirror = CodeMirror(function(elt) {
+                    editor = CodeMirror(function(elt) {
                         myTextArea.parentNode.replaceChild(elt, myTextArea);
                     }, {
                         value: fc,
@@ -63,7 +64,7 @@ $(function() {
             "/savefile", {
                 'File': filename,
                 apikey: key,
-                'Contents': $('#fc').val()
+                'Contents': editor.getValue()
             },
             function(result) {
 

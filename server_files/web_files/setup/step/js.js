@@ -12,6 +12,10 @@ function serverports() {
     localStorage.setItem("minecraft_port", mn_port);
 }
 
+function set_directory(){
+    localStorage.setItem("directory",$("#directory").val());
+}
+
 function set_memory(){
     var ram = $("#memory").val();
     localStorage.setItem("memory", ram);
@@ -30,6 +34,7 @@ function showinfo() {
     document.getElementById("nmc_port").innerHTML = "NodeMC Port: " + localStorage.getItem("nodemc_port");
     document.getElementById("mc_port").innerHTML = "Minecraft Port: " + localStorage.getItem("minecraft_port");
     document.getElementById("memory").innerHTML = "RAM (In MB): " + localStorage.getItem("memory");
+    document.getElementById("directory").innerHTML = "Jarfile directory " + localStorage.getItem("directory");
     document.getElementById("jarfile_v").innerHTML = "Jar Version: " + localStorage.getItem("version");
     document.getElementById("jarfile_f").innerHTML = "Jar Flavour: " + localStorage.getItem("flavour");
     
@@ -41,6 +46,7 @@ function submitinfo() {
             nmc_port: localStorage.getItem("nodemc_port"),
             mc_port: localStorage.getItem("minecraft_port"),
             memory: localStorage.getItem("memory"),
+            directory: localStorage.getItem("directory"),
             version: localStorage.getItem("version"),
             flavour: localStorage.getItem("flavour")
         })
