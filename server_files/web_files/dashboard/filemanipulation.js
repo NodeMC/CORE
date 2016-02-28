@@ -78,9 +78,8 @@ window.onhashchange = function() {
 file();
 
 function rm(name) { // Function for deleting files
-    console.log("Attempting to delete " + name);
     $.ajax({
-        type: "DELETE",        
+        type: "DELETE",
         url: "/deletefile",
         data: {
             file: name,
@@ -88,8 +87,16 @@ function rm(name) { // Function for deleting files
         },
         success: function(res) {
             console.log(res)
-            if (res == true) {
+            if (res == "true") {
+                $(".alert").remove(); // Remove alert if not fully hidden
+                $(".container").prepend('<div class="alert alert-info alert-dismissible" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                    '<center><strong>File ' + name + ' deleted.</strong></center>' +
+                    '</div>');
                 console.log("Deleted!");
+                $("#filelist tr").remove();
+                files();
+                $(".alert").fadeOut(5000, function() {});
             } else {
                 console.log("Error");
             }
