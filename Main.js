@@ -3,7 +3,19 @@
  * panel software - it is a web server that runs on a specific
  * port.
  *
+ * If you have any questions feel free to ask either on Github or
+ * email: gabriel@nodemc.space!
+ * 
  * (c) Gabriel Simmer 2016
+ * 
+ * Todo:
+ * File uploading from HTML5 dashboard
+ * Move more generic functions to own Node module files
+ * Self-updater (possible?)
+ * Support for other flavours of Minecraft server
+ * General dashboard overhaul for sleeker appearence
+ *     - Server stats
+ *     - Other info on index.html
  */
 
 // Requires
@@ -257,6 +269,8 @@ app.get('/download/:file', function(request, response) {
     }
 });
 
+
+// First run setup POST
 app.post('/fr_setup', function(request, response) {
     if (serverOptions.firstrun) {
         var details = {
@@ -269,30 +283,33 @@ app.post('/fr_setup', function(request, response) {
             'version': request.body.version,
             'firstrun': false
         }
+        // Default ports
         if (details.port == null) {
             details.port = 3000;
         }
         if (details.minecraft_port == null) {
             details.port = 25565;
         }
-
+        // ./Default ports
         response.send(JSON.stringify({
             sucess: true
         }));
         var options = JSON.stringify(details, null, 2);
         if (details.version == "latest") {
-            details.version = "1.8.9";
+            details.version = "1.9"; // Must keep this value manually updated /sigh
         }
+        fs.existsSync(details.jarfile_directory) || fs.mkdirSync(details.jarfile_directory)
+
         //Download server jarfile
         if (details.jar == "vanilla") {
             getfile('https://s3.amazonaws.com/Minecraft.Download/versions/' + details.version + '/minecraft_server.' + details.version + '.jar')
                 .pipe(fs.createWriteStream(details.jarfile_directory + details.jar + "." + details.version + ".jar"));
         }
-        if (details.jar == "spigot") {
+        if (details.jar == "spigot") { // Thanks to Yive for letting me use his mirror for Spigot
             getfile('https://tcpr.ca/files/spigot/spigot-' + details.version + '-R0.1-SNAPSHOT-latest.jar')
                 .pipe(fs.createWriteStream(details.jarfile_directory + details.jar + "." + details.version + ".jar"));
         }
-        if (details.jar != "spigot" && details.jar != "vanilla") {
+        if (details.jar != "spigot" && details.jar != "vanilla") { // If it's a modded jarfile or the like
             console.log("Unknown server jar " + details.jar + " - " + details.version + ".");
             console.log("You will need to manually download your jarfile and place it in " + jardir);
         }
@@ -317,7 +334,7 @@ app.post('/fr_setup', function(request, response) {
 app.get('/fr_apikey', function(request, response) {
     if (serverOptions.firstrun) {
         response.send(serverOptions.apikey);
-    } else {
+    } else { // Very strict I know :|
         response.send("Access Denied");
     }
 });
@@ -469,11 +486,11 @@ app.delete('/deletefile', function(request, response) {
     if (checkAPIKey(request.body.apikey) == true) {
         var item = request.body.file;
         console.log(item);
-        fs.unlink(item, function(err){
-               if (err) throw err;
-               console.log(item + " deleted");
-               response.send("true");
-          });
+        fs.unlink(item, function(err) {
+            if (err) throw err;
+            console.log(item + " deleted");
+            response.send("true");
+        });
     } else {
         response.send("false");
     }
