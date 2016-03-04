@@ -9,8 +9,8 @@
  * (c) Gabriel Simmer 2016
  * 
  * Todo:
+ * md5sum check for jarfiles
  * File uploading from HTML5 dashboard
- * Move more generic functions to own Node module files
  * Self-updater (possible?)
  * Support for other flavours of Minecraft server
  * General dashboard overhaul for sleeker appearence
@@ -32,6 +32,7 @@ var ncp = require('ncp').ncp;
 var querystring = require('querystring');
 var morgan = require('morgan');
 var FileStreamRotator = require('file-stream-rotator');
+var serverjar = require('./nmc_modules/serverjar.js');
 // ---
 
 // Set variables for the server(s)
@@ -283,14 +284,7 @@ app.post('/fr_setup', function(request, response) {
             'version': request.body.version,
             'firstrun': false
         }
-        // Default ports
-        if (details.port == null) {
-            details.port = 3000;
-        }
-        if (details.minecraft_port == null) {
-            details.port = 25565;
-        }
-        // ./Default ports
+
         response.send(JSON.stringify({
             sucess: true
         }));
@@ -301,18 +295,11 @@ app.post('/fr_setup', function(request, response) {
         fs.existsSync(details.jarfile_directory) || fs.mkdirSync(details.jarfile_directory)
 
         //Download server jarfile
-        if (details.jar == "vanilla") {
-            getfile('https://s3.amazonaws.com/Minecraft.Download/versions/' + details.version + '/minecraft_server.' + details.version + '.jar')
-                .pipe(fs.createWriteStream(details.jarfile_directory + details.jar + "." + details.version + ".jar"));
-        }
-        if (details.jar == "spigot") { // Thanks to Yive for letting me use his mirror for Spigot
-            getfile('https://tcpr.ca/files/spigot/spigot-' + details.version + '-R0.1-SNAPSHOT-latest.jar')
-                .pipe(fs.createWriteStream(details.jarfile_directory + details.jar + "." + details.version + ".jar"));
-        }
-        if (details.jar != "spigot" && details.jar != "vanilla") { // If it's a modded jarfile or the like
-            console.log("Unknown server jar " + details.jar + " - " + details.version + ".");
-            console.log("You will need to manually download your jarfile and place it in " + jardir);
-        }
+        serverjar.getjar(details.jar, details.version, details.jarfile_directory, function(msg) {
+            if(msg == "invalid_jar"){
+                console.log("Unknown jarfile, manually install!");
+            }
+        });
 
         fs.writeFile("./server_files/properties.json", options, function(err) {
             if (err) {

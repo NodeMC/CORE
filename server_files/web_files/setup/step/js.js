@@ -8,6 +8,13 @@ function getApiKey() {
 function serverports() {
     var nmc_port = $("#nodemc_port").val();
     var mn_port = $("#minecraft_port").val();
+    if(nmc_port == ""){
+        nmc_port = 3000;
+    }
+    if(mn_port == ""){
+        mn_port = 25565;
+    }
+
     localStorage.setItem("nodemc_port", nmc_port);
     localStorage.setItem("minecraft_port", mn_port);
 }

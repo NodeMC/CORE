@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/bladesimmer/nodemc.git"
+    "url": "git+https://github.com/NodeMC/NodeMC-CORE.git"
   },
   "keywords": [
     "nodejs",
@@ -34,7 +34,7 @@
   "author": "Gabriel Simmer",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.com/bladesimmer/nodemc/issues"
+    "url": "https://github.com/NodeMC/NodeMC-COREissues"
   },
-  "homepage": "https://gitlab.com/bladesimmer/nodemc#README"
+  "homepage": "https://nodemc.space/"
 }
