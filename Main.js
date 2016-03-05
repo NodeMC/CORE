@@ -375,7 +375,7 @@ app.get('/files', function(request, response) { // Get server file
         files = items;
         response.send(JSON.stringify({
             files
-        });
+        }));
     });
 });
 
