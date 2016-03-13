@@ -32,6 +32,7 @@ var ncp = require('ncp').ncp;
 var querystring = require('querystring');
 var morgan = require('morgan');
 var FileStreamRotator = require('file-stream-rotator');
+var cors = require('cors'); 
 var serverjar = require('./nmc_modules/serverjar.js');
 // ---
 
@@ -101,10 +102,15 @@ var serverSpawnProcess;
 var serverStopped = false;
 // ---
 
+// Express options
+app.use(cors());
+
 app.use('/', express.static(sf_web));
 app.use(require('body-parser').urlencoded({
     extended: false
 }));
+
+// ---
 
 /*
  * Access logging

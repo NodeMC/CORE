@@ -6,6 +6,7 @@
   "dependencies": {
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.0",
+    "cors": "^2.7.1",
     "epipebomb": "^0.1.1",
     "express": "^4.13.3",
     "external-ip": "^0.2.4",
