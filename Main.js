@@ -491,11 +491,12 @@ app.delete('/deletefile', function(request, response) {
 
 app.listen(PORT); // Listen on port defined in properties.json
 
-if (serverOptions != null && !serverOptions.firstrun) {
-    process.on('exit', function(code) { // When it exits kill the server process too
-        serverSpawnProcess.kill();
-    });
-}
+process.on('exit', function(code) { // When it exits kill the server process too
+    serverSpawnProcess.kill(2);
+});
+serverSpawnProcess.on('exit', function(code) {
+    serverStopped == true; // Server process has crashed or stopped
+});
 process.stdout.on('error', function(err) {
     if (err.code == "EPIPE") {
         process.exit(0);
