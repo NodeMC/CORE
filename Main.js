@@ -37,7 +37,7 @@ var serverjar = require('./nmc_modules/serverjar.js');
 // ---
 
 // Set variables for the server(s)
-var current = 142;
+var current = 145;
 var dir = ".";
 var properties = [];
 var files = "";
@@ -286,7 +286,7 @@ app.post('/fr_setup', function(request, response) {
             'port': parseInt(request.body.nmc_port),
             'minecraft_port': parseInt(request.body.mc_port),
             'ram': parseInt(request.body.memory) + "M",
-            'jarfile_directory': request.body.directory,
+            'jarfile_directory': request.body.directory + "/", // Does not seem to matter if there is an extra '/'
             'jar': request.body.flavour,
             'version': request.body.version,
             'firstrun': false
