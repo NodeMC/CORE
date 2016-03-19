@@ -32,7 +32,7 @@ var ncp = require('ncp').ncp;
 var querystring = require('querystring');
 var morgan = require('morgan');
 var FileStreamRotator = require('file-stream-rotator');
-var cors = require('cors'); 
+var cors = require('cors');
 var serverjar = require('./nmc_modules/serverjar.js');
 // ---
 
@@ -49,6 +49,7 @@ try { // If no error, server has been run before
     var oldport = srvprp.get('server-port');
 
     if (serverOptions.firstrun) {
+        console.log("Naviagte to http://localhost:" + serverOptions.port + " to set up NodeMC.");
         sf_web = "server_files/web_files/setup/";
     } else {
         sf_web = "server_files/web_files/dashboard/";
@@ -302,7 +303,7 @@ app.post('/fr_setup', function(request, response) {
 
         //Download server jarfile
         serverjar.getjar(details.jar, details.version, details.jarfile_directory, function(msg) {
-            if(msg == "invalid_jar"){
+            if (msg == "invalid_jar") {
                 console.log("Unknown jarfile, manually install!");
             }
         });
@@ -494,9 +495,11 @@ app.listen(PORT); // Listen on port defined in properties.json
 process.on('exit', function(code) { // When it exits kill the server process too
     serverSpawnProcess.kill(2);
 });
-serverSpawnProcess.on('exit', function(code) {
-    serverStopped == true; // Server process has crashed or stopped
-});
+if (typeof serverSpawnProcess != "undefined") {
+    serverSpawnProcess.on('exit', function(code) {
+        serverStopped == true; // Server process has crashed or stopped
+    });
+}
 process.stdout.on('error', function(err) {
     if (err.code == "EPIPE") {
         process.exit(0);
