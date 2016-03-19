@@ -22,7 +22,7 @@
 var spawn = require('child_process').spawn;
 var express = require('express');
 var app = require('express')();
-var fs = require('fs');
+var fs = require('node-fs');
 var pr = require('properties-reader');
 var getIP = require('external-ip')();
 var path = require('path');
@@ -299,7 +299,7 @@ app.post('/fr_setup', function(request, response) {
         if (details.version == "latest") {
             details.version = "1.9"; // Must keep this value manually updated /sigh
         }
-        fs.existsSync(details.jarfile_directory) || fs.mkdirSync(details.jarfile_directory)
+        fs.existsSync(details.jarfile_directory) || fs.mkdirSync(details.jarfile_directory,0o777,true)
 
         //Download server jarfile
         serverjar.getjar(details.jar, details.version, details.jarfile_directory, function(msg) {
