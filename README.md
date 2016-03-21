@@ -5,6 +5,8 @@ else you will encounter a `EPIPE` error!**
 
 ## About
 
+[Official EULA](https://nodemc.space/eula/)
+
 [Official Documentation](https://docs.nodemc.space)
 
 [Official Website (deprecated to a certain extent)](https://nodemc.space)
