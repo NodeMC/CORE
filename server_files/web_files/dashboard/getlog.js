@@ -5,7 +5,7 @@ function getlogs() {
         $.get(
             "/log",
             function(log) {
-                $("#log").val(log);
+                $("#log").val(log.split("\n").slice(-500).join("\n"));
                 var textarea = document.getElementById('log');
                 textarea.scrollTop = textarea.scrollHeight;
             });
