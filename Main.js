@@ -43,8 +43,6 @@ var files = "";
 var usingfallback = false;
 var completelog = "";
 var srvprp;
-var restartPending = false;
-
 try { // If no error, server has been run before
     var serverOptions = JSON.parse(fs.readFileSync('server_files/properties.json', 'utf8'));
 
@@ -173,21 +171,16 @@ function checkVersion() { // Check for updates
 }
 
 function restartserver() { // Restarting the server
-    if (!serverStopped) {
-        serverSpawnProcess.stdin.write('say [NodeMC] Restarting server!\n');
+    serverSpawnProcess.stdin.write('say [NodeMC] Restarting server!\n');
 
-        serverSpawnProcess.stdin.write('stop\n');
+    serverSpawnProcess.stdin.write('stop\n');
 
-        serverSpawnProcess.on("close", function() {
-            serverStopped = true;
-            setport();
-
-            startServer();
-        });   
-    } else {
+    serverSpawnProcess.on("close", function() {
+        serverStopped = true;
         setport();
+
         startServer();
-    }
+    });
 }
 
 function setport() { // Enforcing server properties set by host
@@ -247,12 +240,6 @@ function startServer() { // Start server process
     ]);
     serverSpawnProcess.stdout.on('data', log);
     serverSpawnProcess.stderr.on('data', log);
-    serverSpawnProcess.on('exit', function(code) {
-        serverStopped == true; // Server process has crashed or stopped
-        if (restartPending) {
-            startServer();
-        }
-    });
 }
 
 function log(data) { // Log (dump) server output to variable
@@ -377,9 +364,6 @@ app.post('/command', function(request, response) { // Send command to server
         var command = request.param('Body');
         if (command == "stop") {
             serverStopped = true;
-        } else if (command == "restart") {
-            serverStopped = true;
-            restartPending = true;
         }
         serverSpawnProcess.stdin.write(command + '\n');
 
@@ -538,9 +522,6 @@ process.on('exit', function(code) { // When it exits kill the server process too
 if (typeof serverSpawnProcess != "undefined") {
     serverSpawnProcess.on('exit', function(code) {
         serverStopped == true; // Server process has crashed or stopped
-        if (restartPending) {
-            startServer();
-        }
     });
 }
 process.stdout.on('error', function(err) {
