@@ -33,7 +33,11 @@ var querystring = require('querystring');
 var morgan = require('morgan');
 var FileStreamRotator = require('file-stream-rotator');
 var cors = require('cors');
+// --- 
+
+// Custom Node.js modules
 var serverjar = require('./nmc_modules/serverjar.js');
+var plugins = require('./nmc_modules/plugins.js');
 // ---
 
 // Set variables for the server(s)
@@ -138,6 +142,10 @@ app.use(morgan('common', {
 
 // App functions for various things
 
+// Debugging only
+// console.log(plugins.pluginList()); // List plugins
+// ---
+
 function getServerProps(force) {
     if (!force || (typeof srvprp !== "undefined" && srvprp !== null)) {
         return srvprp;
@@ -183,7 +191,7 @@ function restartserver() { // Restarting the server
             setport();
 
             startServer();
-        });   
+        });
     } else {
         setport();
         startServer();
@@ -194,22 +202,22 @@ function setport() { // Enforcing server properties set by host
     //console.log(oldport);
     //console.log(mcport);
     try {
-		var props = getServerProps(); // Get the original properties
-		if (props !== null) {
+        var props = getServerProps(); // Get the original properties
+        if (props !== null) {
             var oldport = props.get('server-port');
-			// Here we set any minecraft server properties we need
-			fs.readFile('server.properties', 'utf8', function(err, data) {
-				if (err) {
-					return console.log(err);
-				}
-				var result = data.replace('server-port=' + oldport, 'server-port=' + mcport);
+            // Here we set any minecraft server properties we need
+            fs.readFile('server.properties', 'utf8', function(err, data) {
+                if (err) {
+                    return console.log(err);
+                }
+                var result = data.replace('server-port=' + oldport, 'server-port=' + mcport);
 
-				fs.writeFile('server.properties', result, 'utf8', function(err) {
-					if (err) return console.log(err);
-				});
-			});
-			props = pr('server.properties'); // Get the new properties
-        //console.log(oldport);
+                fs.writeFile('server.properties', result, 'utf8', function(err) {
+                    if (err) return console.log(err);
+                });
+            });
+            props = pr('server.properties'); // Get the new properties
+            //console.log(oldport);
         } else {
             console.log("Failed to get the server properties!");
         }
@@ -278,6 +286,24 @@ if (serverOptions != null && !serverOptions.firstrun) {
 } else {}
 
 // App post/get request handlers (API)
+//------------------------------------
+
+app.get('/plugin/:ref/:route', function(request, response) {
+    var refs = plugins.pluginList();
+    for (var i = 0; i < refs.length; i++) {
+        if (refs[i]['ref'] == request.params.ref) {
+            if (refs[i]['routes'][request.params.route]['method'] == "get") {
+                try {
+                    response.send(refs[i]['routes'][request.params.route]['reply']);
+                } catch (e) {
+                    response.send("Unknown plugin");
+                }
+            }
+        } else {
+            response.send("Unknown plugin");
+        }
+    }
+});
 
 app.get('/download/:file', function(request, response) {
     var options = {
@@ -329,7 +355,7 @@ app.post('/fr_setup', function(request, response) {
         if (details.version == "latest") {
             details.version = "1.9"; // Must keep this value manually updated /sigh
         }
-        fs.existsSync(details.jarfile_directory) || fs.mkdirSync(details.jarfile_directory,0o777,true)
+        fs.existsSync(details.jarfile_directory) || fs.mkdirSync(details.jarfile_directory, 0o777, true)
 
         //Download server jarfile
         serverjar.getjar(details.jar, details.version, details.jarfile_directory, function(msg) {
@@ -468,15 +494,15 @@ app.post('/savefile', function(request, response) { // Save a POST'd file
 app.get('/info', function(request, response) { // Return server info as JSON object
     var props = getServerProps();
     var serverInfo = [];
-	if (props !== null) {
-		serverInfo.push(props.get('motd')); // message of the day
-		serverInfo.push(props.get('server-port')); // server port
-		serverInfo.push(props.get('white-list')); // if whitelist is on or off
-	} else {
-		serverInfo.push("Failed to get MOTD.");
-		serverInfo.push("Failed to get port.");
-		serverInfo.push(false);
-	}
+    if (props !== null) {
+        serverInfo.push(props.get('motd')); // message of the day
+        serverInfo.push(props.get('server-port')); // server port
+        serverInfo.push(props.get('white-list')); // if whitelist is on or off
+    } else {
+        serverInfo.push("Failed to get MOTD.");
+        serverInfo.push("Failed to get port.");
+        serverInfo.push(false);
+    }
     serverInfo.push(serverOptions['jar'] + ' ' + serverOptions['version']); // server jar version
     serverInfo.push(outsideip); // outside ip
     serverInfo.push(serverOptions['id']); // 

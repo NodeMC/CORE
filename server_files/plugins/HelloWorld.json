@@ -1,0 +1,16 @@
+{
+	"id": "com.gabrielsimmer.helloworld",
+	"ref": "helloworld",
+	"name": "Hello World Plugin",
+	"description": "Simple NodeMC Plugin",
+	"routes": {
+		"ping": {
+			"method": "get",
+			"reply": "pong"
+		}
+	},
+	"comments": {
+		"1": "This is a sample plugin for debugging the plugin API in NodeMC",
+		"2": "You can use this file as a template for other plugins."
+	}
+}
