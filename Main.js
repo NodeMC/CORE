@@ -289,19 +289,11 @@ if (serverOptions != null && !serverOptions.firstrun) {
 //------------------------------------
 
 app.get('/plugin/:ref/:route', function(request, response) {
-    var refs = plugins.pluginList();
-    for (var i = 0; i < refs.length; i++) {
-        if (refs[i]['ref'] == request.params.ref) {
-            if (refs[i]['routes'][request.params.route]['method'] == "get") {
-                try {
-                    response.send(refs[i]['routes'][request.params.route]['reply']);
-                } catch (e) {
-                    response.send("Unknown plugin");
-                }
-            }
-        } else {
-            response.send("Unknown plugin");
-        }
+    var pluginResponse = plugins.handleRoute(ref, route);
+    if (pluginResponse !== null) {
+        response.send(pluginResponse);
+    } else {
+        response.send("Unknown route.");
     }
 });
 

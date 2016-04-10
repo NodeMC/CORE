@@ -11,6 +11,8 @@ name: Name for listing plugins
 
 description: Description of plugin for list
 
+js: Whether the plugin requires NodeMC to load JavaScript 
+
 routes: The routes for the plugin (http://server/$ref/$route)
 
 comments: Comments for the plugin which are not seen by the user
@@ -23,6 +25,7 @@ comments: Comments for the plugin which are not seen by the user
 	"ref": "helloworld",
 	"name": "Hello World Plugin",
 	"description": "Simple NodeMC Plugin",
+	"js": true,
 	"routes": {
 		"ping": {
 			"reply": "pong"
@@ -30,7 +33,11 @@ comments: Comments for the plugin which are not seen by the user
 		"argtest": {
 			"args": "$arg",
 			"reply": "$arg"
-		}
+		},
+        "functest": {
+            "args": "$arg",
+            "reply": "func:funcTest"
+        }
 	},
 	"comments": {
 		"1": "This is a sample plugin for debugging the plugin API in NodeMC",
