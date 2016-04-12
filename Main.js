@@ -38,6 +38,7 @@ var cors = require('cors');
 // Custom Node.js modules
 var serverjar = require('./nmc_modules/serverjar.js');
 var plugins = require('./nmc_modules/plugins.js');
+plugins.loadPlugins();
 // ---
 
 // Set variables for the server(s)
@@ -289,10 +290,17 @@ if (serverOptions != null && !serverOptions.firstrun) {
 //------------------------------------
 
 app.get('/plugin/:ref/:route', function(request, response) {
-    var pluginResponse = plugins.handleRoute(ref, route);
-    if (pluginResponse !== null) {
-        response.send(pluginResponse);
-    } else {
+    var ref = request.body.ref;
+    var route = request.body.route;
+    try {
+        var pluginResponse = plugins.handleRoute(ref, route, "?");
+        if (pluginResponse !== null) {
+            response.send(pluginResponse);
+        } else {
+            response.send("Unknown route.");
+        }
+    } catch (e) {
+        console.log(e);
         response.send("Unknown route.");
     }
 });

@@ -14,7 +14,7 @@ function loadPlugins() {
 
 function registerPlugin(path) {
     var pluginJS = null;
-    var pluginJSON = require(path);
+    var pluginJSON = JSON.parse(fs.readFileSync(path));
     var plugin = {
         id: pluginJSON.id,
         ref: pluginJSON.ref,
@@ -25,7 +25,7 @@ function registerPlugin(path) {
         originalJSON: pluginJSON
     };
     if (plugin.loadJS) {
-        pluginJS = require("./server_files/plugins/" + plugin.id + "plugin.js");
+        pluginJS = require("./server_files/plugins/" + plugin.id + "/plugin.js");
         pluginJS.init();
     }
     for (var routeKey in pluginJSON.routes) {
@@ -59,6 +59,7 @@ function handleRoute(ref, route, args) {
     for (var pluginID in plugins) {
         var plugin = plugins[pluginID];
         if (plugin.ref == ref) {
+        	console.log(plugin);
             return plugin.routes[route].reply(args);
         }
     }
