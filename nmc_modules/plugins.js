@@ -14,7 +14,7 @@ function loadPlugins() {
 
 function registerPlugin(path) {
     var pluginJS = null;
-    var pluginJSON = JSON.parse(fs.readFileSync(path));
+    var pluginJSON = (path);
     var plugin = {
         id: pluginJSON.id,
         ref: pluginJSON.ref,

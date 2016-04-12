@@ -290,8 +290,8 @@ if (serverOptions != null && !serverOptions.firstrun) {
 //------------------------------------
 
 app.get('/plugin/:ref/:route', function(request, response) {
-    var ref = request.body.ref;
-    var route = request.body.route;
+    var ref = request.params.ref;
+    var route = request.params.route;
     try {
         var pluginResponse = plugins.handleRoute(ref, route, "?");
         if (pluginResponse !== null) {
