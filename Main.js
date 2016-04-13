@@ -292,7 +292,7 @@ if (serverOptions != null && !serverOptions.firstrun) {
 app.get('/plugin/:ref/:route', function(request, response) {
     var ref = request.params.ref;
     var route = request.params.route;
-    try {
+    try {   
         var pluginResponse = plugins.handleRoute(ref, route, "?");
         if (pluginResponse !== null) {
             response.send(pluginResponse);

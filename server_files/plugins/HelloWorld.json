@@ -12,7 +12,7 @@
         "functest": {
 			"method": "get",
             "args": "$arg",
-            "reply": "func:funcTest"
+            "reply": "func:funcTest()"
         }
 	},
 	"comments": {

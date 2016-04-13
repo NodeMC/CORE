@@ -7,29 +7,29 @@ var plugins = {};
 function loadPlugins() {
     for (var i in files) {
         if (path.extname(files[i]) == ".json") {
-            registerPlugin("./server_files/plugins/" + files[i]);
+            registerPlugin("../server_files/plugins/" + files[i]);
         }
     }
 }
 
 function registerPlugin(path) {
     var pluginJS = null;
-    var pluginJSON = (path);
+    var pluginJSON = require(path);
     var plugin = {
         id: pluginJSON.id,
         ref: pluginJSON.ref,
         name: pluginJSON.name,
         desc: pluginJSON.description,
         loadJS: pluginJSON.js,
-        routes: {},
+        routes: pluginJSON.routes,
         originalJSON: pluginJSON
     };
     if (plugin.loadJS) {
-        pluginJS = require("./server_files/plugins/" + plugin.id + "/plugin.js");
+        pluginJS = require("../server_files/plugins/" + plugin.id + "/plugin.js");
         pluginJS.init();
     }
     for (var routeKey in pluginJSON.routes) {
-        if (!pluginJSON.hasOwnProperty(key)) continue;
+        if (!pluginJSON.hasOwnProperty(routeKey)) continue;
         var route = {
             method: pluginJSON.routes[routeKey].method,
             args: pluginJSON.routes[routeKey].args
@@ -55,12 +55,28 @@ function getPlugins() {
     return plugins;
 }
 
+/*
+ * Many years ago... this feature was started...
+ * And now, it has been achieved...
+ * Full Node.js module support has been achieved
+ * for plugins. 
+ * And now, I must go, for it has been too long since
+ * I used
+ * the loo.
+*/
 function handleRoute(ref, route, args) {
     for (var pluginID in plugins) {
         var plugin = plugins[pluginID];
+        var js = require("../server_files/plugins/" + plugin.id + "/plugin.js");
+        // console.log(js);
         if (plugin.ref == ref) {
-        	console.log(plugin);
-            return plugin.routes[route].reply(args);
+        	if(plugin.routes[route].reply.split(":")[0] === "func"){
+        		var fun = "js." + plugin.routes[route].reply.split(":")[1];
+        		var result = eval(fun);
+        		return result;
+        	}else{
+            	return plugin.routes[route].reply;
+        	}
         }
     }
 }
