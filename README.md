@@ -9,6 +9,8 @@ else you will encounter a `EPIPE` error!**
 
 [Official Website (deprecated to a certain extent)](https://nodemc.space)
 
+[My Patreon](https://www.patreon.com/gmemstr?ty=h)
+
 NodeMC CORE is the core application for NodeMC. It is an API wrapper
 for Minecraft servers that developers can use to build dashboards 
 and apps around using whatever frameworks and languages they choose. 
