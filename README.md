@@ -1,5 +1,7 @@
 # NodeMC-CORE
 
+[![Build Status](http://nodemc.space:8080/job/NodeMC/badge/icon)](http://nodemc.space:8080/job/NodeMC/)
+
 **Make sure you own the directory jarfiles save to, or 
 else you will encounter a `EPIPE` error!**
 
