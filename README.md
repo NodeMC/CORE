@@ -1,5 +1,7 @@
 # NodeMC-CORE
 
+[![Build Status](http://nodemc.space:8080/job/NodeMC/badge/icon)](http://nodemc.space:8080/job/NodeMC/)
+
 **Make sure you own the directory jarfiles save to, or 
 else you will encounter a `EPIPE` error!**
 
@@ -8,6 +10,8 @@ else you will encounter a `EPIPE` error!**
 [Official Documentation](https://docs.nodemc.space)
 
 [Official Website (deprecated to a certain extent)](https://nodemc.space)
+
+[My Patreon](https://www.patreon.com/gmemstr?ty=h)
 
 NodeMC CORE is the core application for NodeMC. It is an API wrapper
 for Minecraft servers that developers can use to build dashboards 

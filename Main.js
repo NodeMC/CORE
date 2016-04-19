@@ -204,8 +204,13 @@ function setport() { // Enforcing server properties set by host
     //console.log(oldport);
     //console.log(mcport);
     try {
+<<<<<<< HEAD
         var props = getServerProps(); // Get the original properties
         if (props !== null) {
+=======
+		var props = getServerProps(); // Get the original properties
+		if ((typeof props !== "undefined") && (props !== null)) {
+>>>>>>> 5795d6d952739fcc55b254e9339cbf34ab5dbc82
             var oldport = props.get('server-port');
             // Here we set any minecraft server properties we need
             fs.readFile('server.properties', 'utf8', function(err, data) {
@@ -593,5 +598,8 @@ process.stdout.on('error', function(err) {
         process.exit(0);
     }
 });
+<<<<<<< HEAD
 =======
 >>>>>>> master
+=======
+>>>>>>> 5795d6d952739fcc55b254e9339cbf34ab5dbc82
