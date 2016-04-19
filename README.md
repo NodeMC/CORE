@@ -2,7 +2,7 @@
 
 [![Build Status](http://nodemc.space:8080/job/NodeMC/badge/icon)](http://nodemc.space:8080/job/NodeMC/) [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/gmemstr/nodemc)
 
-**Make sure you own the directory jarfiles save to, or 
+**Make sure you own the directory jarfiles save to, or
 else you will encounter a `EPIPE` error!**
 
 ## About
@@ -14,8 +14,8 @@ else you will encounter a `EPIPE` error!**
 [My Patreon](https://www.patreon.com/gmemstr?ty=h)
 
 NodeMC CORE is the core application for NodeMC. It is an API wrapper
-for Minecraft servers that developers can use to build dashboards 
-and apps around using whatever frameworks and languages they choose. 
+for Minecraft servers that developers can use to build dashboards
+and apps around using whatever frameworks and languages they choose.
 
 It is written in Node.js for utmost speed and reliability, as well
 as the wealth of npm packages that are used to expand the functionality
@@ -37,10 +37,10 @@ well beyond traditional dashboards abilities.
     - Linux / Mac / BSD / Windows
     - Python 2.6 or 2.7 (use --python if not in PATH)
     - Windows: Visual Studio 2010+
-    
+
 ## Running
 
-Running NodeMC is easy. 
+Running NodeMC is easy.
 
 ```
 git clone https://github.com/NodeMC/NodeMC-CORE.git
@@ -54,36 +54,42 @@ node Main.js
 
 Then navigate to http://localhost:3000 and go through the setup processs
 
+## Tests
+
+```bash
+mocha
+```
+
 ## Contributing
 
 I welcome contributions from other developers, however there are a few
 things you should keep in mind when making a pull request.
 
 First, any additions that are considered security risks, even in favour of
-performance, will immediately be rejected. Should you believethe pull be
+performance, will immediately be rejected. Should you believe the pull be
 reconsidered, create a new issue with the 'pull reconsideration' tag. It
 will be looked over, and if approved you can resubmit a new pull request.
-Failure to do so will result in loss of pull request privelage. 
+Failure to do so will result in loss of pull request privilege.
 
-Second, NodeMC *is not* goverened by a 'features over performance' **OR**
+Second, NodeMC *is not* governed by a 'features over performance' **OR**
 'performance over features' mentality. Rather, it is a 'what the average
-user wants, as effeciently as possible'. In this way, there is no unnecessary
+user wants, as efficiently as possible'. In this way, there is no unnecessary
 'fluff' features.
 
-Third, pre-done npm packages are discouraged unless absolutely neccesary. While
+Third, pre-done npm packages are discouraged unless absolutely necessary. While
 there are currently quite a few npm package dependencies, it is planned to eliminate
 the need for most of these and replace them with more specific methods. Help with
-these are greatly appreciated. 
+these are greatly appreciated.
 
 ## Building
 
-> For the developers' and authors' protection, the GPL clearly explains 
+> For the developers' and authors' protection, the GPL clearly explains
 that there is no warranty for this free software.  For both users' and
 authors' sake, the GPL requires that modified versions be marked as
 changed, so that their problems will not be attributed erroneously to
 authors of previous versions.   
 
-If you want to build NodeMC as a binary for easier deployment on servers, 
+If you want to build NodeMC as a binary for easier deployment on servers,
 you **may only for personal use**. Distribution of custom binaries is
 covered in the LICENSE file.
 

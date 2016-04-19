@@ -4,6 +4,7 @@
   "description": "minecraft server control panel made in nodejs",
   "main": "Main.js",
   "dependencies": {
+    "async": "^2.0.0-rc.3",
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.0",
     "cors": "^2.7.1",
@@ -12,6 +13,7 @@
     "external-ip": "^0.2.4",
     "file-stream-rotator": "0.0.6",
     "ip": "^1.1.0",
+    "mocha": "^2.4.5",
     "morgan": "^1.6.1",
     "mysql": "^2.10.0",
     "ncp": "^2.0.0",
@@ -23,6 +25,7 @@
     "nexe": "^1.1.0"
   },
   "scripts": {
+    "start": "node server.js",
     "test": "node Main.js"
   },
   "repository": {
@@ -33,7 +36,7 @@
     "nodejs",
     "minecraft"
   ],
-  "author": "Gabriel Simmer",
+  "author": "Gabriel Simmer <gabriel@nodemc.spac>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/NodeMC/NodeMC-COREissues"

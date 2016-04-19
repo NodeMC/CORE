@@ -1,13 +1,13 @@
-/*
+/**
  * This is the sourcecode for the NodeMC control
  * panel software - it is a web server that runs on a specific
  * port.
  *
  * If you have any questions feel free to ask either on Github or
  * email: gabriel@nodemc.space!
- * 
+ *
  * (c) Gabriel Simmer 2016
- * 
+ *
  * Todo:
  * md5sum check for jarfiles
  * File uploading from HTML5 dashboard
@@ -16,45 +16,54 @@
  * General dashboard overhaul for sleeker appearence
  *     - Server stats
  *     - Other info on index.html
- */
+ *
+ * @author Gabriel Simmer <gabreil@nodemc.space>
+ * @version 1.0.0
+ * @license GPL3
+ **/
+
+'use strict';
 
 // Requires
-var spawn = require('child_process').spawn;
-var express = require('express');
-var app = require('express')();
-var fs = require('node-fs');
-var pr = require('properties-reader');
-var getIP = require('external-ip')();
-var path = require('path');
-var getfile = require('request');
-var crypto = require('crypto');
-var ncp = require('ncp').ncp;
-var querystring = require('querystring');
-var morgan = require('morgan');
-var FileStreamRotator = require('file-stream-rotator');
-var cors = require('cors');
-// --- 
+const spawn             = require('child_process').spawn;
+const async             = require('async');
+const express           = require('express');
+const fs                = require('node-fs');
+const pr                = require('properties-reader');
+const getIP             = require('external-ip')();
+const path              = require('path');
+const getfile           = require('request');
+const crypto            = require('crypto');
+const ncp               = require('ncp').ncp;
+const querystring       = require('querystring');
+const morgan            = require('morgan');
+const cors              = require('cors');
+const FileStreamRotator = require('file-stream-rotator');
+// ---
 
 // Custom Node.js modules
-var serverjar = require('./nmc_modules/serverjar.js');
-var plugins = require('./nmc_modules/plugins.js');
+let serverjar = require('./lib/serverjar.js');
+let plugins = require('./lib/plugins.js');
 plugins.loadPlugins();
 // ---
 
 // Set variables for the server(s)
-var current = 150;
-var dir = ".";
-var files = "";
-var usingfallback = false;
-var completelog = "";
-var srvprp;
-var restartPending = false;
+let current = 150,
+    dir = ".",
+    files = "",
+    usingfallback = false,
+    completelog = "",
+    srvprp,
+    restartPending = false;
+
+// instance the server
+let app = new express();
 
 try { // If no error, server has been run before
     var serverOptions = JSON.parse(fs.readFileSync('server_files/properties.json', 'utf8'));
 
     if (serverOptions.firstrun) {
-        console.log("Naviagte to http://localhost:" + serverOptions.port + " to set up NodeMC.");
+        console.log("Navigate to http://localhost:" + serverOptions.port + " to set up NodeMC.");
         sf_web = "server_files/web_files/setup/";
     } else {
         sf_web = "server_files/web_files/dashboard/";
@@ -471,7 +480,7 @@ app.post('/files', function(request, response) { // Return contents of a file
         var file = request.body.Body;
         if (!fs.lstatSync(file).isDirectory()) {
             fs.readFile("./" + file, {
-                encoding: 'utf-8'
+                encoding: 'utf8'
             }, function(err, data) {
                 if (!err) {
                     response.send(data);
@@ -526,7 +535,7 @@ app.get('/info', function(request, response) { // Return server info as JSON obj
     }
     serverInfo.push(serverOptions['jar'] + ' ' + serverOptions['version']); // server jar version
     serverInfo.push(outsideip); // outside ip
-    serverInfo.push(serverOptions['id']); // 
+    serverInfo.push(serverOptions['id']); //
     response.send(JSON.stringify(serverInfo));
 });
 
