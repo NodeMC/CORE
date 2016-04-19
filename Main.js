@@ -42,7 +42,7 @@ plugins.loadPlugins();
 // ---
 
 // Set variables for the server(s)
-var current = 145;
+var current = 150;
 var dir = ".";
 var files = "";
 var usingfallback = false;
@@ -170,12 +170,12 @@ function checkAPIKey(key) {
 }
 
 function checkVersion() { // Check for updates
-    getfile.get('https://nodemc.space/version', function(error, response, body) {
+    getfile.get('https://raw.githubusercontent.com/NodeMC/NodeMC-CORE/master/version.txt', function(error, response, body) {
         if (!error && response.statusCode == 200) {
             var version = body;
             if (version != current) {
                 var behind = version - current;
-                console.log("NodeMC is " + behind + " versions behind. Run the setup script again.")
+                console.log("NodeMC is " + behind + " versions behind. Run a git pull to update!")
             }
         }
     });
@@ -293,7 +293,24 @@ app.get('/plugin/:ref/:route', function(request, response) {
     var ref = request.params.ref;
     var route = request.params.route;
     try {   
-        var pluginResponse = plugins.handleRoute(ref, route, "?");
+        var pluginResponse = plugins.handleRoute(ref, route, undefined, "get");
+        if (pluginResponse !== null) {
+            response.send(pluginResponse);
+        } else {
+            response.send("Unknown route.");
+        }
+    } catch (e) {
+        console.log(e);
+        response.send("Unknown route.");
+    }
+});
+
+app.post('/plugin/:ref/:route', function(request, response) {
+    var ref = request.params.ref;
+    var route = request.params.route;
+    var args = request.body.args;
+    try {   
+        var pluginResponse = plugins.handleRoute(ref, route, args, "post");
         if (pluginResponse !== null) {
             response.send(pluginResponse);
         } else {

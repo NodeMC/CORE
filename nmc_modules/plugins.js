@@ -63,26 +63,30 @@ function getPlugins() {
  * And now, I must go, for it has been too long since
  * I used
  * the loo.
-*/
-function handleRoute(ref, route, args) {
+ */
+function handleRoute(ref, route, args, method) {
     for (var pluginID in plugins) {
         var plugin = plugins[pluginID];
         var js = require("../server_files/plugins/" + plugin.id + "/plugin.js");
         // console.log(js);
         if (plugin.ref == ref) {
-        	if(plugin.routes[route].reply.split(":")[0] === "func"){
-        		var fun = "js." + plugin.routes[route].reply.split(":")[1];
-        		var result = eval(fun);
-        		return result;
-        	}else{
-            	return plugin.routes[route].reply;
-        	}
+            if (plugin.routes[route].method == method || plugin.routes[route].method == "*") {
+                if (plugin.routes[route].reply.split(":")[0] === "func") {
+                    var fun = "js." + plugin.routes[route].reply.split(":")[1] + "(" + args + ")";
+                    var result = eval(fun);
+                    return result;
+                } else {
+                    return plugin.routes[route].reply;
+                }
+            }else{
+                return "Use " + plugin.routes[route].method + " for this path!";
+            }
+            }
         }
     }
-}
 
-module.exports = {
-	getPlugins: getPlugins,
-    loadPlugins: loadPlugins,
-    handleRoute: handleRoute
-};
+    module.exports = {
+        getPlugins: getPlugins,
+        loadPlugins: loadPlugins,
+        handleRoute: handleRoute
+    };

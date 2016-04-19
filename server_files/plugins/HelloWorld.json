@@ -10,9 +10,9 @@
 			"reply": "pong"
 		},
         "functest": {
-			"method": "get",
+			"method": "*",
             "args": "$arg",
-            "reply": "func:funcTest()"
+            "reply": "func:funcTest"
         }
 	},
 	"comments": {
