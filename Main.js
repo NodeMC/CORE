@@ -203,41 +203,39 @@ function setport() { // Enforcing server properties set by host
     //console.log(oldport);
     //console.log(mcport);
     try {
-<<<<<<< HEAD
         var props = getServerProps(); // Get the original properties
         if (props !== null) {
-=======
-		var props = getServerProps(); // Get the original properties
-		if ((typeof props !== "undefined") && (props !== null)) {
->>>>>>> 5795d6d952739fcc55b254e9339cbf34ab5dbc82
-            var oldport = props.get('server-port');
-            // Here we set any minecraft server properties we need
-            fs.readFile('server.properties', 'utf8', function(err, data) {
+            var props = getServerProps(); // Get the original properties
+            if ((typeof props !== "undefined") && (props !== null)) {
+                var oldport = props.get('server-port');
+                // Here we set any minecraft server properties we need
+                fs.readFile('server.properties', 'utf8', function(err, data) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    var result = data.replace('server-port=' + oldport, 'server-port=' + mcport);
+
+                    fs.writeFile('server.properties', result, 'utf8', function(err) {
+                        if (err) return console.log(err);
+                    });
+                });
+                props = pr('server.properties'); // Get the new properties
+                //console.log(oldport);
+            } else {
+                console.log("Failed to get the server properties!");
+            }
+
+            fs.readFile('eula.txt', 'utf8', function(err, data) {
                 if (err) {
                     return console.log(err);
                 }
-                var result = data.replace('server-port=' + oldport, 'server-port=' + mcport);
+                var result = data.replace('eula=false', 'eula=true');
 
-                fs.writeFile('server.properties', result, 'utf8', function(err) {
+                fs.writeFile('eula.txt', result, 'utf8', function(err) {
                     if (err) return console.log(err);
                 });
             });
-            props = pr('server.properties'); // Get the new properties
-            //console.log(oldport);
-        } else {
-            console.log("Failed to get the server properties!");
         }
-
-        fs.readFile('eula.txt', 'utf8', function(err, data) {
-            if (err) {
-                return console.log(err);
-            }
-            var result = data.replace('eula=false', 'eula=true');
-
-            fs.writeFile('eula.txt', result, 'utf8', function(err) {
-                if (err) return console.log(err);
-            });
-        });
     } catch (e) {
         console.log(e);
     }
@@ -297,7 +295,7 @@ if (serverOptions != null && !serverOptions.firstrun) {
 app.get('/plugin/:ref/:route', function(request, response) {
     var ref = request.params.ref;
     var route = request.params.route;
-    try {   
+    try {
         var pluginResponse = plugins.handleRoute(ref, route, undefined, "get");
         if (pluginResponse !== null) {
             response.send(pluginResponse);
@@ -315,7 +313,7 @@ app.post('/plugin/:ref/:route', function(request, response) {
     var route = request.params.route;
     var args = request.body.args;
     // console.log(request.body.args);
-    try {   
+    try {
         var pluginResponse = plugins.handleRoute(ref, route, args, "post");
         if (pluginResponse !== null) {
             response.send(pluginResponse);
@@ -597,4 +595,3 @@ process.stdout.on('error', function(err) {
         process.exit(0);
     }
 });
-
