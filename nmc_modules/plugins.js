@@ -72,7 +72,8 @@ function handleRoute(ref, route, args, method) {
         if (plugin.ref == ref) {
             if (plugin.routes[route].method == method || plugin.routes[route].method == "*") {
                 if (plugin.routes[route].reply.split(":")[0] === "func") {
-                    var fun = "js." + plugin.routes[route].reply.split(":")[1] + "(" + args + ")";
+                    var fun = "js." + plugin.routes[route].reply.split(":")[1] + "('" + args + "')";
+                    console.log(fun);
                     var result = eval(fun);
                     return result;
                 } else {

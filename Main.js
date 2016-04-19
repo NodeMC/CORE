@@ -309,6 +309,7 @@ app.post('/plugin/:ref/:route', function(request, response) {
     var ref = request.params.ref;
     var route = request.params.route;
     var args = request.body.args;
+    // console.log(request.body.args);
     try {   
         var pluginResponse = plugins.handleRoute(ref, route, args, "post");
         if (pluginResponse !== null) {
