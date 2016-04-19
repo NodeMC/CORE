@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * This is the sourcecode for the NodeMC control
  * panel software - it is a web server that runs on a specific
@@ -598,8 +597,4 @@ process.stdout.on('error', function(err) {
         process.exit(0);
     }
 });
-<<<<<<< HEAD
-=======
->>>>>>> master
-=======
->>>>>>> 5795d6d952739fcc55b254e9339cbf34ab5dbc82
+
