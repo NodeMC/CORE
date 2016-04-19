@@ -3,17 +3,24 @@
 	"ref": "helloworld",
 	"name": "Hello World Plugin",
 	"description": "Simple NodeMC Plugin",
+<<<<<<< HEAD
 	"js": true,
+=======
+>>>>>>> master
 	"routes": {
 		"ping": {
 			"method": "get",
 			"reply": "pong"
+<<<<<<< HEAD
 		},
         "functest": {
 			"method": "*",
             "args": "$arg",
             "reply": "func:funcTest"
         }
+=======
+		}
+>>>>>>> master
 	},
 	"comments": {
 		"1": "This is a sample plugin for debugging the plugin API in NodeMC",

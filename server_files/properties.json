@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "apikey": "ec98f0b3c182abdea4991b3c98bc8ad9",
+=======
+  "apikey": "81685bfaa463bc0be2112975c0b6beab",
+>>>>>>> master
   "port": 3000,
   "minecraft_port": 25565,
   "ram": "",
