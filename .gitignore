@@ -1,5 +1,5 @@
 tmp/
-config/config.example.json
+config/config.json
 node_modules/
 build/
 nmc_logs/
