@@ -2,7 +2,7 @@
   "name": "nodemc",
   "version": "1.0.0",
   "description": "minecraft server control panel made in nodejs",
-  "main": "Main.js",
+  "main": "server.js",
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "body-parser": "^1.14.2",
@@ -23,7 +23,10 @@
     "request": "^2.69.0"
   },
   "devDependencies": {
-    "nexe": "^1.1.0"
+    "assert": "^1.3.0",
+    "nexe": "^1.1.0",
+    "should": "^8.3.1",
+    "supertest": "^1.2.0"
   },
   "scripts": {
     "start": "node server.js",

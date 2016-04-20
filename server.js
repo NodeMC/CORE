@@ -206,6 +206,8 @@ async.waterfall([
 
     console.log("Server running at localhost:" + port);
     console.log("API Key: " + apikey);
+
+    return;
   }
   console.log("Navigate to http://localhost:" + config.nodemc.port + " to set up NodeMC.");
 });
