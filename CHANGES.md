@@ -70,6 +70,8 @@ module.exports = (Router, log) => {
 
 `Router` - the `express#Router` object.
 
+`server` - server object
+
 `log`    - a `NodeMC#Log` object
 
 
@@ -84,7 +86,7 @@ breaking applications that haven't been updated yet.
 
 #### Standard Error/success response.
 
-Along wih the versioning all responses will contain a standard response, with a
+Along with the versioning all responses will contain a standard response, with a
 few extra fields in certain conditions
 
 ```json
@@ -152,3 +154,57 @@ _Authenticated_: yes
 **TODO**: This should be merged with `/v1/files`
 
 `/download/:file` -> `/v1/download/:file`
+
+### Plugins
+
+The plugin system has been removed as the same functionability is provided via the
+dynamic router. However, it has not been extended to scan a directory for new routes
+yet.
+
+
+### New Libraries
+
+*Important*
+
+`nmc_modules` -> `lib`
+
+
+#### lib/server.js
+
+This library provides access and controls the minecrafter server in a OOP fashion.
+This allows isolation of the server to a single class, and makes setting up new
+ones at the same time much easier.
+
+#### lib/stage.js
+
+A very hacky-*ish* stage system to control stages metadata. In the future it will
+block code until each stage either via ES6 or simple callbacks with async.
+
+#### lib/express.js
+
+The dynamic loading of routes for express, also controls starting express.
+
+### Configuration
+
+*Important* / *Breaking*
+
+Configuration has been changed, and will have a utility to convert old configs to
+the new format.
+
+```js
+{
+  "minecraft": {
+    "name": null,
+    "ram": "512M",
+    "port": 25565,
+    "jar": "",
+    "version": ""
+  },
+  "nodemc": {
+    "apikey": "3808e65d80bbe3fe373485c30f5dd830",
+    "version": "150",
+    "port": 3000,
+    "logDirectory": "./nmc_logs"
+  }
+}
+```

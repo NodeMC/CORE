@@ -27,78 +27,212 @@
 // Requires
 const spawn             = require("child_process").spawn;
 const async             = require("async");
+const path              = require("path");
 const express           = require("express");
 const fs                = require("node-fs");
 const pr                = require("properties-reader");
-const getIP             = require("external-ip")();
-const getfile           = require("request");
 const crypto            = require("crypto");
 const querystring       = require("querystring");
 const morgan            = require("morgan");
 const cors              = require("cors");
 const FileStreamRotator = require("file-stream-rotator");
+const bodyP             = require("body-parser");
 
 // Internal Modules.
-const stage   = require("./lib/stage.js");
+const stage     = require("./lib/stage.js");
 const Server    = require("./lib/server.js");
 const Routes    = require("./lib/express.js");
+const serverjar = require("./lib/serverjar.js");
 
-//const serverjar = require("./lib/serverjar.js");
+// config for now.
+let config = {
+  minecraft: {
+    name: null,
+    ram: "512M",
+    port: 25565,
+    jar: "",
+    version: ""
+  },
+  nodemc: {
+    apikey: "3808e65d80bbe3fe373485c30f5dd830",
+    version: "150",
+    port: 3000,
+    logDirectory: path.join(__dirname, "/nmc_logs")
+  },
+  firstrun: true
+}
 
 // instance the server
 let app = new express();
 
-// Build the Express Routes.
-// to do: make this dynamic with stage loader.
-let routes    = new Routes(stage, app, Server, function() {
+// Instance the Server Object
+let server = new Server(config)
+
+async.waterfall([
+  /**
+   * Stage 0 - Pre-Init
+   **/
+  (next) => {
+    let logger;
+    let logDirectory = config.nodemc.logDirectory;
+
+    stage.start(0, "preinit", "INIT");
+
+    // Error Handler
+    process.on("exit", () => { // When it exits kill the server process too
+      if(server.spawn) server.spawn.kill(2);
+    });
+
+    if(server.spawn) {
+      server.spawn.on("exit", () => {
+        // to do re implement server restart defferel
+      });
+    }
+
+    // Settup the logger
+    fs.exists(logDirectory, exists => {
+      if(!exists) {
+        let err = fs.mkdirSync(logDirectory);
+
+        if(err) {
+          return next("Log Directory Doesn\'t exist.");
+        }
+      }
+
+      let logFile = path.join(logDirectory + "/access-%DATE%.log");
+      logger  = FileStreamRotator.getStream({
+        filename: logFile,
+        frequency: "daily",
+        verbose: false,
+        date_format: "YYYY-MM-DD"
+      });
+
+      stage.finished(0, "preinit", "INIT");
+    });
+
+    stage.on("finished", data => {
+      if(data.stage === 0) {
+        return next(false, logger);
+      }
+    })
+  },
+
+  /**
+   * Stage 1 - Express Construction.
+   **/
+  (logger, next) => {
+    stage.start(1, "express::construct", "INIT");
+
+    // middleware
+    app.use(cors());
+    app.use("/", express.static(sf_web));
+    app.use(bodyP.json());
+    app.use(bodyP.urlencoded({
+        extended: false
+    }));
+    app.use(morgan("common", {
+        stream: logger
+    }));
+
+    app.use((req, res, next) => {
+      /**
+       * Send A API conforment response
+       *
+       * @param {Anything} data  - data to send.
+       *
+       * @returns {Res#Send} express res.send
+       **/
+      res.success = (data) => {
+        return res.send({
+          success: true,
+          data: data
+        });
+      }
+
+      /**
+       * Send A API conforment error.
+       *
+       * @param {String} message - error message
+       * @param {Anything} data  - data to send.
+       *
+       * @returns {Res#Send} express res.send
+       **/
+      res.error = (message, data) => {
+        return res.send({
+          success: false,
+          message: message,
+          data: data
+        })
+      }
+
+      return next();
+    })
+
+    // Build the Express Routes.
+    let routes = new Routes(stage, app, server, function() {
       let args = Array.prototype.slice.call(arguments, 0);
       args[0]  = "main: "+stage.Sub+ " stage "+ stage.Stage + ": " + args[0];
       console.log.apply(console, args);
-});
+    });
+
+    stage.on("finished", data => {
+      if(data.stage === 1) {
+        return next(false, routes);
+      }
+    })
+  },
+
+  /**
+   * Stage 2 - Express Launch
+   **/
+   (routes, next) => {
+     routes.start(config.nodemc.port);
+
+     stage.on("finished", data => {
+       if(data.stage === 2) {
+         return next();
+       }
+     })
+   }
+], err => {
+  if(err) {
+    console.log("Failed to Start! :(")
+    console.error(err);
+    process.exit(1);
+  }
+
+  if (serverOptions && !serverOptions.firstrun) {
+    // Start then restart server for things to take effect
+    //checkVersion();
+    console.log("Starting server...");
+
+    server.startServer();
+    server.setport(config.minecraft.port);
+    server.restartserver();
+
+    console.log("Server running at localhost:" + PORT);
+    console.log("API Key: " + apikey);
+  }
+  console.log("Navigate to http://localhost:" + config.nodemc.port + " to set up NodeMC.");
+})
 
 // Set variables for the server(s)
-let current = 150,
-    dir = ".",
+let dir = ".",
     files = "",
-    usingfallback = true,
     completelog = "",
-    srvprp,
-    restartPending = false;
+    srvprp;
 
 // Server Variables.
 let serverOptions,
     sf_web,
-    outsideip,
-    serverSpawnProcess,
-    serverStopped = false;
+    outsideip;
 
 // Server Configuration Variables / Defaults.
-let name,
-    ram     = "512M",
-    PORT    = 3000,
-    mcport  = 25565,
-    jarfile = "",
+let PORT    = 3000,
     jardir,
     apikey,
     token,
     newOptions;
-
-/*
- * Access logging
- */
-
-var logDirectory = dir + "/nmc_logs"
-
-// ensure log directory exists
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
-
-// create a rotating write stream
-let accessLogStream = FileStreamRotator.getStream({
-    filename: logDirectory + "/access-%DATE%.log",
-    frequency: "daily",
-    verbose: false,
-    date_format: "YYYY-MM-DD"
-});
 
 try { // If no error, server has been run before
   serverOptions = require("./frontend/properties.json");
@@ -110,13 +244,11 @@ try { // If no error, server has been run before
 }
 
 if (serverOptions.firstrun) {
-  console.log("Navigate to http://localhost:" + serverOptions.port + " to set up NodeMC.");
   sf_web = "frontend/web_files/setup/";
 } else {
   sf_web = "frontend/web_files/dashboard/";
 }
 
-try {
     if (serverOptions.apikey == "") {
       token = crypto.randomBytes(16).toString("hex");
       apikey = serverOptions.apikey = token;
@@ -132,125 +264,18 @@ try {
     } else {
       apikey = serverOptions.apikey;
     }
-    name = serverOptions.name;
-    ram = serverOptions.ram;
-    PORT = serverOptions.port;
-    mcport = serverOptions.minecraft_port;
-    jardir = serverOptions.jarfile_directory
-    jarfile = jardir + serverOptions.jar + "." + serverOptions.version + ".jar";
-    usingfallback = false;
-} catch (e) { // Fallback options
-    console.log(e);
-}
-// ---
-
-// Express options
-app.use(cors());
-
-app.use("/", express.static(sf_web));
-app.use(require("body-parser").urlencoded({
-    extended: false
-}));
-
-// ---
-
-app.use(morgan("common", {
-    skip: function(req, res) {
-        return req.path == "/log" || req.path == "/serverup"
-    },
-    stream: accessLogStream
-}));
-
-// App functions for various things
-
-// Debugging only
-// console.log(plugins.pluginList()); // List plugins
-// ---
-
-function getServerProps(force) {
-    if (!force || (typeof srvprp !== "undefined" && srvprp !== null)) {
-        return srvprp;
-    } else {
-        try {
-            srvprp = pr("server.properties");
-        } catch (e) {
-            console.log(e);
-            srvprp = null;
-        }
-        return srvprp;
-    }
-}
 
 function checkAPIKey(key) {
-    if (key == apikey) {
+    if (key === apikey) {
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
-
-function log(data) { // Log (dump) server output to variable
-    //  Technically uneeded, useful for debugging
-    //process.stdout.write(data.toString());
-    completelog = completelog + data.toString();
-}
-// ---
-
-if (serverOptions != null && !serverOptions.firstrun) {
-    // Start then restart server for things to take effect
-    //checkVersion();
-    console.log("Starting server...");
-    startServer();
-    setport();
-    restartserver();
-    console.log("Server running at localhost:" + PORT);
-    console.log("API Key: " + apikey);
-    if (usingfallback == true) {
-        console.log("Using fallback options! Check your properties.json.")
-    }
-    // ---
-} else {}
-
-// App post/get request handlers (API)
-//------------------------------------
-
-app.get("/plugin/:ref/:route", function(request, response) {
-    var ref = request.params.ref;
-    var route = request.params.route;
-    try {
-        var pluginResponse = plugins.handleRoute(ref, route, undefined, "get");
-        if (pluginResponse !== null) {
-            response.send(pluginResponse);
-        } else {
-            response.send("Unknown route.");
-        }
-    } catch (e) {
-        console.log(e);
-        response.send("Unknown route.");
-    }
-});
-
-app.post("/plugin/:ref/:route", function(request, response) {
-    var ref = request.params.ref;
-    var route = request.params.route;
-    var args = request.body.args;
-    // console.log(request.body.args);
-    try {
-        var pluginResponse = plugins.handleRoute(ref, route, args, "post");
-        if (pluginResponse !== null) {
-            response.send(pluginResponse);
-        } else {
-            response.send("Unknown route.");
-        }
-    } catch (e) {
-        console.log(e);
-        response.send("Unknown route.");
-    }
-});
 
 app.get("/download/:file", function(request, response) {
     var options = {
-        root: "./",
+        root: __dirname,
         dotfiles: "deny",
         headers: {
             "x-timestamp": Date.now(),
@@ -276,61 +301,6 @@ app.get("/download/:file", function(request, response) {
     }
 });
 
-
-// First run setup POST
-app.post("/fr_setup", function(request, response) {
-    if (serverOptions.firstrun) {
-        var details = {
-            "apikey": apikey,
-            "port": parseInt(request.body.nmc_port),
-            "minecraft_port": parseInt(request.body.mc_port),
-            "ram": parseInt(request.body.memory) + "M",
-            "jarfile_directory": request.body.directory + "/", // Does not seem to matter if there is an extra "/"
-            "jar": request.body.flavour,
-            "version": request.body.version,
-            "firstrun": false
-        }
-
-        response.send(JSON.stringify({
-            sucess: true
-        }));
-        var options = JSON.stringify(details, null, 2);
-        if (details.version == "latest") {
-            details.version = "1.9"; // Must keep this value manually updated /sigh
-        }
-        fs.existsSync(details.jarfile_directory) || fs.mkdirSync(details.jarfile_directory, 777, true)
-
-        //Download server jarfile
-        serverjar.getjar(details.jar, details.version, details.jarfile_directory, function(msg) {
-            if (msg == "invalid_jar") {
-                console.log("Unknown jarfile, manually install!");
-            }
-        });
-
-        fs.writeFile("./server_files/properties.json", options, function(err) {
-            if (err) {
-                return console.log("Something went wrong!");
-            } else {
-                console.log("New admin settings saved.");
-                console.log("You can use CTRL+C to stop the server.");
-            }
-        });
-    } else {
-        response.send(JSON.stringify({
-            success: false,
-            message: "is_not_first_run",
-            moreinfo: "The server has been run before!"
-        }));
-    }
-});
-
-app.get("/fr_apikey", function(request, response) {
-    if (serverOptions.firstrun) {
-        response.send(serverOptions.apikey);
-    } else { // Very strict I know :|
-        response.send("Access Denied");
-    }
-});
 
 app.post("/verifykey", function(request, response) {
     var verify = request.param("apikey");
@@ -455,24 +425,5 @@ app.delete("/deletefile", function(request, response) {
         });
     } else {
         response.send("false");
-    }
-});
-
-routes.start(PORT);
-
-process.on("exit", function(code) { // When it exits kill the server process too
-    serverSpawnProcess.kill(2);
-});
-if (typeof serverSpawnProcess != "undefined") {
-    serverSpawnProcess.on("exit", function(code) {
-        serverStopped == true; // Server process has crashed or stopped
-        if (restartPending) {
-            startServer();
-        }
-    });
-}
-process.stdout.on("error", function(err) {
-    if (err.code == "EPIPE") {
-        process.exit(0);
     }
 });

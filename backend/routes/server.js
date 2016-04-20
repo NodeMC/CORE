@@ -30,7 +30,7 @@ module.exports = (Router, server) => {
       server.startServer();
     }
 
-    return res.send();
+    return res.succes();
   });
 
   /**
@@ -44,7 +44,7 @@ module.exports = (Router, server) => {
       server.running = true;
     }
 
-    return res.send();
+    return res.sucess();
   });
 
   /**
@@ -59,7 +59,7 @@ module.exports = (Router, server) => {
       text = "up";
     }
 
-    return res.send(text);
+    return res.success(text);
   });
 
   return Router;
