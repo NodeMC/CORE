@@ -89,11 +89,12 @@ breaking applications that haven't been updated yet.
 Along with the versioning all responses will contain a standard response, with a
 few extra fields in certain conditions
 
-```json
+```js
 {
   "success": false, // true when an error has not occurred.
+  "message": "not_first_run", // sent with success: false
   "deprecated": true, // ONLY included when the route/version has been deprecated.
-  ... etc ...
+  "data": "" // data sent by endpoint
 }
 ```
 

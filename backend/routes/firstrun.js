@@ -8,6 +8,8 @@
 "use strict";
 
 const serverjar = require("../../lib/serverjar.js"),
+      mkdirp    = require("mkdirp"),
+      async     = require("async"),
       fs        = require("fs");
 
 module.exports = (Router, server) => {
@@ -24,42 +26,84 @@ module.exports = (Router, server) => {
       });
     }
 
-    let details = {
-      "apikey": apikey,
-      "port": parseInt(req.body.nmc_port, 10),
-      "minecraft_port": parseInt(req.body.mc_port, 10),
-      "ram": parseInt(req.body.memory, 10) + "M",
-      "jarfile_directory": req.body.directory + "/", // Does not seem to matter if there is an extra "/"
-      "jar": req.body.flavour,
-      "version": req.body.version,
-      "firstrun": false
-    }
+    let details;
+    async.waterfall([
+      /**
+       * Parse the config.
+       **/
+      (next) => {
+        details = {
+          minecraft: {
+            name: null,
+            port: parseInt(req.body.mc_port, 10),
+            ram: parseInt(req.body.memory, 10) + "M",
+            dir: req.body.directory + "/",
+            jar: req.body.flavour,
+            version: req.body.version
+          },
+          nodemc: {
+            apikey: apikey,
+            port: parseInt(req.body.nmc_port, 10)
+          },
+          firstrun: false
+        }
 
-    let options = JSON.stringify(details, null, 2);
-    if (details.version == "latest") {
-      details.version = "1.9"; // Must keep this value manually updated /sigh
-    }
+        if (details.minecraft.version == "latest") {
+          details.minecraft.version = "1.9";
+        }
 
-    // to do: async this.
-    let exists = fs.existsSync(details.jarfile_directory);
-    if(!exists) {
-      fs.mkdirSync(details.jarfile_directory, 777, true);
-    }
+        return next();
+      },
 
-    //Download server jarfile
-    serverjar.getjar(details.jar, details.version, details.jarfile_directory, function(msg) {
-      if (msg == "invalid_jar") {
-        console.log("Unknown jarfile, manually install!");
+      /**
+       * Check and make sure the jar file directory exists
+       **/
+      (next) => {
+        fs.exists(details.jarfile_directory, exists => {
+            if(!exists) {
+              return mkdirp(details.jarfile_directory, next);
+            }
+
+            return next();
+        });
+      },
+
+      /**
+       * Fetch the jar.
+       **/
+      (next) => {
+        serverjar.getjar(details.jar, details.version, details.jarfile_directory, function(msg) {
+          if (msg == "invalid_jar") {
+            return next("Failed to obtain jar file.")
+          }
+
+          return next();
+        });
+      },
+
+      /**
+       * Save the Configuration
+       **/
+      (next) => {
+        details = JSON.stringify(details);
+        fs.writeFile("./frontend/properties.json", details, function(err) {
+          if (err) {
+            return next(err);
+          }
+
+          return next();
+        });
       }
-    });
-
-    fs.writeFile("./frontend/properties.json", options, function(err) {
-      if (err) {
-        return console.log("Something went wrong!");
+    ], err => {
+      if(err) {
+        return res.error("internal", {
+          debuginfo: err
+        });
       }
 
       console.log("New admin settings saved.");
       console.log("You can use CTRL+C to stop the server.");
+      return res.send({});
     });
   });
 

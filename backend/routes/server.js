@@ -7,7 +7,11 @@
 
 "use strict";
 
+const authCheck = require("../../lib/auth.js");
+
 module.exports = (Router, server) => {
+  Router.use(authCheck(server));
+
   /**
    * POST /restart
    *
@@ -60,6 +64,35 @@ module.exports = (Router, server) => {
     }
 
     return res.success(text);
+  });
+
+  /**
+   * POST /execute
+   *
+   * Execute a command on the server.
+   **/
+  Router.post("/execute", function(req, res) {
+    const command = request.param("Body");
+    if (command == "stop") {
+      server.running = false;
+    } else if (command == "restart") {
+      server.restartServer();
+    }
+
+    server.execute(command);
+
+    let buffer = [];
+    let collector = function(data) {
+      data = data.toString();
+      buffer.push(data.split("]: ")[1]);
+    };
+
+    server.spawn.stdout.on("data", collector);
+
+    setTimeout(function() {
+      server.spawn.stdout.removeListener("data", collector);
+      response.success(buffer.join(""));
+    }, 250);
   });
 
   return Router;

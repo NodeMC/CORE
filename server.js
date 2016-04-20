@@ -50,6 +50,7 @@ let config = {
     name: null,
     ram: "512M",
     port: 25565,
+    dir: "./minecraft",
     jar: "",
     version: ""
   },
@@ -92,7 +93,7 @@ async.waterfall([
     // Settup the logger
     fs.exists(logDirectory, exists => {
       if(!exists) {
-        let err = fs.mkdirSync(logDirectory);
+        let err = mkdirp.sync(logDirectory);
 
         if(err) {
           return next("Log Directory Doesn\'t exist.");
@@ -308,32 +309,6 @@ app.post("/verifykey", function(request, response) {
         response.send("true");
     } else {
         response.send("false");
-    }
-});
-
-app.post("/command", function(request, response) { // Send command to server
-    if (checkAPIKey(request.param("apikey")) == true) {
-        var command = request.param("Body");
-        if (command == "stop") {
-            serverStopped = true;
-        } else if (command == "restart") {
-            serverStopped = true;
-            restartPending = true;
-        }
-        serverSpawnProcess.stdin.write(command + "\n");
-
-        var buffer = [];
-        var collector = function(data) {
-            data = data.toString();
-            buffer.push(data.split("]: ")[1]);
-        };
-        serverSpawnProcess.stdout.on("data", collector);
-        setTimeout(function() {
-            serverSpawnProcess.stdout.removeListener("data", collector);
-            response.send(buffer.join(""));
-        }, 250);
-    } else {
-        response.send("Invalid API key");
     }
 });
 
