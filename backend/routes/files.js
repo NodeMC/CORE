@@ -94,5 +94,26 @@ module.exports = (Router, server) => {
     });
   });
 
+  /**
+   * DELETE /delete
+   *
+   * Delete a file.
+   **/
+  Router.delete("/delete", (req, res) => {
+    let item = req.body.file;
+    let dir  = server.config.minecraft.dir;
+
+    let file = path.join(dir, item);
+    fs.unlink(file, function(err) {
+      if (err) {
+        return res.error("internal", {
+          debuginfo: err
+        });
+      }
+
+      res.success();
+    });
+  });
+
   return Router;
 };

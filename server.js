@@ -25,15 +25,13 @@
 "use strict";
 
 // Requires
-const spawn             = require("child_process").spawn;
 const async             = require("async");
 const path              = require("path");
 const express           = require("express");
 const fs                = require("node-fs");
-const pr                = require("properties-reader");
 const crypto            = require("crypto");
-const querystring       = require("querystring");
 const morgan            = require("morgan");
+const mkdirp            = require("mkdirp");
 const cors              = require("cors");
 const FileStreamRotator = require("file-stream-rotator");
 const bodyP             = require("body-parser");
@@ -42,25 +40,13 @@ const bodyP             = require("body-parser");
 const stage     = require("./lib/stage.js");
 const Server    = require("./lib/server.js");
 const Routes    = require("./lib/express.js");
-const serverjar = require("./lib/serverjar.js");
 
 // config for now.
-let config = {
-  minecraft: {
-    name: null,
-    ram: "512M",
-    port: 25565,
-    dir: "./minecraft",
-    jar: "",
-    version: ""
-  },
-  nodemc: {
-    apikey: "3808e65d80bbe3fe373485c30f5dd830",
-    version: "150",
-    port: 3000,
-    logDirectory: path.join(__dirname, "/nmc_logs")
-  },
-  firstrun: true
+let config;
+try {
+  config = require("./config/config.json");
+} catch(e) {
+  console.error("Failed to read config. This is OK on first run.")
 }
 
 // instance the server
@@ -126,7 +112,14 @@ async.waterfall([
 
     // middleware
     app.use(cors());
-    app.use("/", express.static(sf_web));
+
+    // static files
+    if(config.firstrun) {
+      app.use("/", express.static(config.dashboard.setup));
+    } else {
+      app.use("/", express.static(config.dashboard.dashboard));
+    }
+
     app.use(bodyP.json());
     app.use(bodyP.urlencoded({
         extended: false
@@ -203,108 +196,19 @@ async.waterfall([
   }
 
   if (serverOptions && !serverOptions.firstrun) {
+    let port   = config.minecraft.port,
+        apikey = config.nodemc.apikey;
+
     // Start then restart server for things to take effect
     //checkVersion();
     console.log("Starting server...");
 
     server.startServer();
-    server.setport(config.minecraft.port);
+    server.setport(port);
     server.restartserver();
 
-    console.log("Server running at localhost:" + PORT);
+    console.log("Server running at localhost:" + port);
     console.log("API Key: " + apikey);
   }
   console.log("Navigate to http://localhost:" + config.nodemc.port + " to set up NodeMC.");
-})
-
-// Set variables for the server(s)
-let dir = ".",
-    files = "",
-    completelog = "",
-    srvprp;
-
-// Server Variables.
-let serverOptions,
-    sf_web,
-    outsideip;
-
-// Server Configuration Variables / Defaults.
-let PORT    = 3000,
-    jardir,
-    apikey,
-    token,
-    newOptions;
-
-try { // If no error, server has been run before
-  serverOptions = require("./frontend/properties.json");
-} catch (e) { // If there is an error, copy server files!
-    console.error(e);
-    console.log("Essential files not found! Please read the guide on Getting Started :)");
-    console.log("Exiting...");
-    process.exit(1);
-}
-
-if (serverOptions.firstrun) {
-  sf_web = "frontend/web_files/setup/";
-} else {
-  sf_web = "frontend/web_files/dashboard/";
-}
-
-if (serverOptions.apikey == "") {
-  token = crypto.randomBytes(16).toString("hex");
-  apikey = serverOptions.apikey = token;
-  newOptions = JSON.stringify(serverOptions, null, 2);
-
-  console.log("Generating new API key");
-
-  fs.writeFile("server_files/properties.json", newOptions, function(err) {
-    if (err) {
-      return console.error("Something went wrong!");
-    }
-  });
-} else {
-  apikey = serverOptions.apikey;
-}
-
-app.get("/download/:file", function(request, response) {
-    var options = {
-        root: __dirname,
-        dotfiles: "deny",
-        headers: {
-            "x-timestamp": Date.now(),
-            "x-sent": true
-        }
-    };
-    var file = querystring.unescape(request.params.file);
-    if (!fs.lstatSync(file).isDirectory()) {
-        fs.readFile("./" + file, {
-            encoding: "utf-8"
-        }, function(err, data) {
-            if (!err) {
-                response.download(file);
-            } else {
-                response.send("file not found");
-            }
-
-        });
-    } else {
-        fs.readdir(dir + "/" + file, function(err, items) {
-
-        });
-    }
-});
-
-
-app.delete("/deletefile", function(request, response) {
-    if (checkAPIKey(request.body.apikey) == true) {
-        var item = request.body.file;
-        console.log(item);
-        fs.unlink(item, function(err) {
-            if (err) throw err;
-            console.log(item + " deleted");
-            response.send("true");
-        });
-    } else {
-        response.send("false");
-    }
 });

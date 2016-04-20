@@ -87,7 +87,7 @@ module.exports = (Router, server) => {
        **/
       (next) => {
         details = JSON.stringify(details);
-        fs.writeFile("./frontend/properties.json", details, function(err) {
+        fs.writeFile("./config/config.json", details, function(err) {
           if (err) {
             return next(err);
           }

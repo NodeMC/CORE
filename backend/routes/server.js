@@ -113,22 +113,24 @@ module.exports = (Router, server) => {
    *
    * Get server info.
    **/
-  Router.get("/info", function(request, response) { // Return server info as JSON object
-      var props = getServerProps();
-      var serverInfo = [];
-      if (props !== null) {
-          serverInfo.push(props.get("motd")); // message of the day
-          serverInfo.push(props.get("server-port")); // server port
-          serverInfo.push(props.get("white-list")); // if whitelist is on or off
-      } else {
-          serverInfo.push("Failed to get MOTD.");
-          serverInfo.push("Failed to get port.");
-          serverInfo.push(false);
-      }
-      serverInfo.push(serverOptions.jar + " " + serverOptions.version); // server jar version
-      serverInfo.push(outsideip); // outside ip
-      serverInfo.push(serverOptions.id); //
-      response.send(JSON.stringify(serverInfo));
+  Router.get("/info", (req, res) => { // Return server info as JSON object
+    const props = server.getServerProps();
+    let serverInfo = [];
+    if(!props) {
+      return res.error("internal", {
+        moreinfo: "Failed to get props."
+      });
+    }
+
+    let ver = server.config.minecraft.ver,
+        jar = server.config.minecraft.jar;
+
+    serverInfo.push(props.get("motd")); // message of the day
+    serverInfo.push(props.get("server-port")); // server port
+    serverInfo.push(props.get("white-list")); // if whitelist is on or off
+    serverInfo.push(jar + " " + ver);
+
+    res.success(serverInfo);
   });
 
   return Router;
