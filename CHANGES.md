@@ -144,6 +144,10 @@ _Authenticated_: yes
 
 #### /v1/plugin
 
+*Important* / *Breaking*
+
+This is not being implemented as of now...
+
 _Authenticated_: variable
 
 `/plugin/:ref/:route` -> `/v1/plugin/:ref/:route`
@@ -207,6 +211,12 @@ OR from a query param:
 
 ```js
 ?apikey=myapikey
+```
+
+OR from `Authentication` header.
+
+```js
+  Authentication: myapikey
 ```
 
 It returns a res#error response when invalid or not supplied.

@@ -6,56 +6,23 @@ const should  = require("should"),
       path    = require("path"),
       request = require("supertest");
 
-let cpath = path.join(__dirname, "../../config");
-let config;
-try {
-  config = require(path.join(cpath, "config.json"));
-} catch(e) {
-  // using example config, this is ok.
-  config = require(path.join(cpath, "config.example.json"));
-}
+// Test Helpers
+let failsWithoutAuthentication = require("../helpers/auth.js");
+let restartServer              = require("../helpers/server.js");
+let config                     = require("../helpers/config.js")();
 
-const port   = 3000;
+// Constants
+const port   = config.nodemc.port;
 const apikey = config.nodemc.apikey;
 
 describe("/v1/server", () => {
   let url = "http://127.0.0.1:"+port+"/v1/server";
 
-  beforeEach((done) => {
-    let base   = path.join(__dirname, "../..");
-    let server = path.join(base, "server.js");
-
-    let sp = spawn("node", [server], {
-      cwd: base
-    });
-
-    sp.on("error", err => {
-      console.error("ERROR:", err);
-    })
-
-    sp.on("close", code => {
-      console.log("server close with", code);
-    });
-
-    return done();
-  });
+  beforeEach(restartServer);
 
   describe("/status", () => {
     it("should fail when not authenticated", (next) => {
-      request(url).get("/status")
-      .expect("Content-Type", "application/json; charset=utf-8")
-      .end((err, res) => {
-        if(err) {
-          return next(err);
-        }
-
-        if(res.body.success) {
-          let stringified = JSON.stringify(res.body, null, 1);
-          return next(new Error("Expected: success: false, got: \n"+stringified));
-        }
-
-        return next();
-      });
+      failsWithoutAuthentication(url, "/status", next);
     });
 
     it("should return down on init", (next) => {
@@ -74,6 +41,36 @@ describe("/v1/server", () => {
 
         return next();
       });
+    });
+  });
+
+  describe("/start", () => {
+    it("should fail when not authenticated", (next) => {
+      failsWithoutAuthentication(url, "/status", next);
+    });
+  });
+
+  describe("/stop", () => {
+    it("should fail when not authenticated", (next) => {
+      failsWithoutAuthentication(url, "/status", next);
+    });
+  });
+
+  describe("/restart", () => {
+    it("should fail when not authenticated", (next) => {
+      failsWithoutAuthentication(url, "/status", next);
+    });
+  });
+
+  describe("/execute", () => {
+    it("should fail when not authenticated", (next) => {
+      failsWithoutAuthentication(url, "/status", next);
+    });
+  });
+
+  describe("/log", () => {
+    it("should fail when not authenticated", (next) => {
+      failsWithoutAuthentication(url, "/status", next);
     });
   });
 });
