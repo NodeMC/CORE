@@ -32,7 +32,6 @@ module.exports = (Router, server) => {
        * Parse the config.
        **/
       (next) => {
-        console.log(req.body);
         details = {
           minecraft: {
             name: null,
@@ -46,6 +45,7 @@ module.exports = (Router, server) => {
             apikey: apikey,
             port: parseInt(req.body.nmc_port, 10)
           },
+          dashboard: require("../../config/config.example.json").dashboard,
           firstrun: false
         }
 

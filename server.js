@@ -195,7 +195,7 @@ async.waterfall([
     process.exit(1);
   }
 
-  if (serverOptions && !serverOptions.firstrun) {
+  if (config && !config.firstrun) {
     let port   = config.minecraft.port,
         apikey = config.nodemc.apikey;
 

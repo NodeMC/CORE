@@ -1,0 +1,21 @@
+{
+  "minecraft": {
+    "name": null,
+    "ram": "512M",
+    "port": 25565,
+    "dir": "./minecraft",
+    "jar": "",
+    "version": ""
+  },
+  "nodemc": {
+    "apikey": "3808e65d80bbe3fe373485c30f5dd830",
+    "version": "150",
+    "port": 3000,
+    "logDirectory": "./nmc_logs"
+  },
+  "dashboard": {
+    "setup": "./frontend/setup",
+    "dashboard": "./frontend/dashboard"
+  },
+  "firstrun": true
+}
