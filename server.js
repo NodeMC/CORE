@@ -47,6 +47,7 @@ try {
   config = require("./config/config.json");
 } catch(e) {
   console.error("Failed to read config. This is OK on first run.")
+  config = require("./config/config.example.json");
 }
 
 // instance the server
@@ -79,11 +80,7 @@ async.waterfall([
     // Settup the logger
     fs.exists(logDirectory, exists => {
       if(!exists) {
-        let err = mkdirp.sync(logDirectory);
-
-        if(err) {
-          return next("Log Directory Doesn\'t exist.");
-        }
+        mkdirp.sync(logDirectory);
       }
 
       let logFile = path.join(logDirectory + "/access-%DATE%.log");
@@ -205,7 +202,7 @@ async.waterfall([
 
     server.startServer();
     server.setport(port);
-    server.restartserver();
+    server.restartServer();
 
     console.log("Server running at localhost:" + port);
     console.log("API Key: " + apikey);

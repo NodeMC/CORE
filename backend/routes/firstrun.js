@@ -38,12 +38,13 @@ module.exports = (Router, server) => {
             port: parseInt(req.body.mc_port, 10),
             ram: parseInt(req.body.memory, 10) + "M",
             dir: req.body.directory + "/",
-            jar: req.body.flavour,
-            version: req.body.version
+            jar: req.body.flavour || "vanilla",
+            version: req.body.version || "latest"
           },
           nodemc: {
             apikey: apikey,
-            port: parseInt(req.body.nmc_port, 10)
+            port: parseInt(req.body.nmc_port, 10),
+            logDirectory: "./nodemc/logs"
           },
           dashboard: require("../../config/config.example.json").dashboard,
           firstrun: false
@@ -86,7 +87,7 @@ module.exports = (Router, server) => {
        * Save the Configuration
        **/
       (next) => {
-        details = JSON.stringify(details);
+        details = JSON.stringify(details, null, 1);
         fs.writeFile("./config/config.json", details, function(err) {
           if (err) {
             return next(err);

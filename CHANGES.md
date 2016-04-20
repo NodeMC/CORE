@@ -172,7 +172,7 @@ yet.
 
 #### lib/server.js
 
-This library provides access and controls the minecrafter server in a OOP fashion.
+This library provides access and controls the minecraft server in a OOP fashion.
 This allows isolation of the server to a single class, and makes setting up new
 ones at the same time much easier.
 
@@ -184,6 +184,13 @@ block code until each stage either via ES6 or simple callbacks with async.
 #### lib/express.js
 
 The dynamic loading of routes for express, also controls starting express.
+
+#### lib/serverjar.js
+
+This library has been modified to be much more safe in handling files, now waits
+until the fd has been closed, and removes a lot of code repetetion.
+
+It also should allow installing forge servers in the future.
 
 #### lib/auth.js
 
@@ -221,6 +228,28 @@ Router.post("/secrets", auth(server), (req, res) => {
 }
 ```
 
+### Global Changes
+
+*Important* / *Breaking*
+
+A lot of the code was previously written using global procedural code, here's a few
+of their changes.
+
+`restartserver()` -> **lib/server.js** `server.restartServer()`
+
+`setport()`       -> **lib/server.js** `server.setport()`
+
+`startServer()`   -> **lib/server.js** `server.startServer()`
+
+`serverStopped`   -> **lib/server.js** `server.running`
+
+`serverRunning`   -> **lib/server.js** `server.running`
+
+`getip()`         -> **REMOVED**
+
+`ram/PORT/etc`    -> `server.config[nodemc/minecraft]` (config object)
+
+
 ### Configuration
 
 *Important* / *Breaking*
@@ -234,6 +263,7 @@ the new format.
     "name": null,
     "ram": "512M",
     "port": 25565,
+    "dir": "./minecraft",
     "jar": "",
     "version": ""
   },
@@ -242,6 +272,11 @@ the new format.
     "version": "150",
     "port": 3000,
     "logDirectory": "./nmc_logs"
-  }
+  },
+  "dashboard": {
+    "setup": "./frontend/setup",
+    "dashboard": "./frontend/dashboard"
+  },
+  "firstrun": true
 }
 ```
