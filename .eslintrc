@@ -37,7 +37,7 @@
     /* Stylistic Issues */
     "no-mixed-spaces-and-tabs": 2,
     "no-underscore-dangle": 2,
-    "quotes": [1, "double", "avoid-escape"],
+    "quotes": [2, "double", "avoid-escape"],
   },
   "extends": "eslint:recommended"
 }

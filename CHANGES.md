@@ -290,3 +290,19 @@ the new format.
   "firstrun": true
 }
 ```
+
+### Tests
+
+Tests tests test! The number one large project solver in the world! implemented
+test driver development by using `mocha` to run unit tests on the API endpoints
+
+It's setup to allow testing all versions of routes in the future, and basic run
+time checks as well.
+
+## eslint
+
+Style and formatting can become quite the pain later on, eslint normalizes styling
+and allows configuration of what is an "error" and what is not.
+
+By plugging the eslint rules into the test runner, we can isolate and easily view
+changes that aren't up to style without having to burn our eyes in the process.
