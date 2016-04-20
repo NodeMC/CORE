@@ -25,7 +25,7 @@ module.exports = (Router, server) => {
     }
 
     let details = {
-      "apikey": server.config.nodemc.apikey,
+      "apikey": apikey,
       "port": parseInt(req.body.nmc_port, 10),
       "minecraft_port": parseInt(req.body.mc_port, 10),
       "ram": parseInt(req.body.memory, 10) + "M",

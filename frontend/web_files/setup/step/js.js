@@ -1,6 +1,6 @@
 function getApiKey() {
-    $.get("/fr_apikey", function(data){
-       $("#key").val(data); 
+    $.get("/v1/firstrun/apikey", function(data){
+       $("#key").val(data);
        localStorage.setItem("apikey", data);
     });
 }
@@ -44,12 +44,12 @@ function showinfo() {
     document.getElementById("directory").innerHTML = "Jarfile directory " + localStorage.getItem("directory");
     document.getElementById("jarfile_v").innerHTML = "Jar Version: " + localStorage.getItem("version");
     document.getElementById("jarfile_f").innerHTML = "Jar Flavour: " + localStorage.getItem("flavour");
-    
+
 }
 
 function submitinfo() {
      $(".loader").show();
-    $.post("/fr_setup", {
+    $.post("/v1/firstrun/setup", {
             nmc_port: localStorage.getItem("nodemc_port"),
             mc_port: localStorage.getItem("minecraft_port"),
             memory: localStorage.getItem("memory"),
@@ -58,7 +58,7 @@ function submitinfo() {
             flavour: localStorage.getItem("flavour")
         })
         .done(function(data) {
-            $(".loader").hide();    
+            $(".loader").hide();
             var result = JSON.parse(data);
             console.log(data);
             if (result['sucess'] == true) {
