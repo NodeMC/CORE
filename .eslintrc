@@ -33,11 +33,11 @@
     /* Variables */
     "no-catch-shadow": 2,
     /* Node.JS */
-    "no-sync": 2,
+    "no-sync": 1,
     /* Stylistic Issues */
     "no-mixed-spaces-and-tabs": 2,
     "no-underscore-dangle": 2,
-    "quotes": [1, "single", "avoid-escape"],
+    "quotes": [1, "double", "avoid-escape"],
   },
   "extends": "eslint:recommended"
 }
