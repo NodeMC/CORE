@@ -32,6 +32,7 @@ module.exports = (Router, server) => {
        * Parse the config.
        **/
       (next) => {
+        console.log(req.body);
         details = {
           minecraft: {
             name: null,
@@ -48,10 +49,6 @@ module.exports = (Router, server) => {
           firstrun: false
         }
 
-        if (details.minecraft.version == "latest") {
-          details.minecraft.version = "1.9";
-        }
-
         return next();
       },
 
@@ -59,12 +56,12 @@ module.exports = (Router, server) => {
        * Check and make sure the jar file directory exists
        **/
       (next) => {
-        fs.exists(details.jarfile_directory, exists => {
-            if(!exists) {
-              return mkdirp(details.jarfile_directory, next);
-            }
+        fs.exists(details.minecraft.dir, exists => {
+          if(!exists) {
+            return mkdirp(details.minecraft.dir, next);
+          }
 
-            return next();
+          return next();
         });
       },
 
@@ -72,9 +69,13 @@ module.exports = (Router, server) => {
        * Fetch the jar.
        **/
       (next) => {
-        serverjar.getjar(details.jar, details.version, details.jarfile_directory, function(msg) {
+        let dir = details.minecraft.dir,
+            jar = details.minecraft.jar,
+            ver = details.minecraft.version;
+
+        serverjar(jar, ver, dir, (msg) => {
           if (msg == "invalid_jar") {
-            return next("Failed to obtain jar file.")
+            return next("Failed to obtain jar file.");
           }
 
           return next();
@@ -96,6 +97,7 @@ module.exports = (Router, server) => {
       }
     ], err => {
       if(err) {
+        console.log("ERROR:", err)
         return res.error("internal", {
           debuginfo: err
         });

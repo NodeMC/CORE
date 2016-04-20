@@ -185,6 +185,42 @@ block code until each stage either via ES6 or simple callbacks with async.
 
 The dynamic loading of routes for express, also controls starting express.
 
+#### lib/auth.js
+
+This library is a simple express middleware to grab the apikey from either a
+JSON body:
+
+```json
+{
+  "apikey": "myapikeyhere"
+}
+```
+
+OR from a query param:
+
+```js
+?apikey=myapikey
+```
+
+It returns a res#error response when invalid or not supplied.
+
+Instance it like so:
+
+```js
+let auth   = require("./lib/auth.js"); // make sure to get relative paths right
+let server = myserverconfigobjecthere; // supplied in routers anyways
+Router.use(auth(server));
+
+// OR
+
+Router.post("/secrets", auth(server), (req, res) => {
+  // We're authenticated if we get this far!
+  res.send({
+    secret: "The NSA is watching you! :O"
+  });
+}
+```
+
 ### Configuration
 
 *Important* / *Breaking*

@@ -250,28 +250,20 @@ if (serverOptions.firstrun) {
   sf_web = "frontend/web_files/dashboard/";
 }
 
-    if (serverOptions.apikey == "") {
-      token = crypto.randomBytes(16).toString("hex");
-      apikey = serverOptions.apikey = token;
-      newOptions = JSON.stringify(serverOptions, null, 2);
+if (serverOptions.apikey == "") {
+  token = crypto.randomBytes(16).toString("hex");
+  apikey = serverOptions.apikey = token;
+  newOptions = JSON.stringify(serverOptions, null, 2);
 
-      console.log("Generating new API key");
+  console.log("Generating new API key");
 
-      fs.writeFile("server_files/properties.json", newOptions, function(err) {
-        if (err) {
-          return console.error("Something went wrong!");
-        }
-      });
-    } else {
-      apikey = serverOptions.apikey;
+  fs.writeFile("server_files/properties.json", newOptions, function(err) {
+    if (err) {
+      return console.error("Something went wrong!");
     }
-
-function checkAPIKey(key) {
-    if (key === apikey) {
-        return true;
-    }
-
-    return false;
+  });
+} else {
+  apikey = serverOptions.apikey;
 }
 
 app.get("/download/:file", function(request, response) {
@@ -302,92 +294,6 @@ app.get("/download/:file", function(request, response) {
     }
 });
 
-
-app.post("/verifykey", function(request, response) {
-    var verify = request.param("apikey");
-    if (checkAPIKey(verify) == true) {
-        response.send("true");
-    } else {
-        response.send("false");
-    }
-});
-
-app.get("/log", function(request, response) { // Get server log
-    response.send(completelog);
-});
-
-app.get("/files", function(request, response) { // Get server file
-    fs.readdir(dir + "/", function(err, items) {
-        files = items;
-        response.send(JSON.stringify({
-            files
-        }));
-    });
-});
-
-app.post("/files", function(request, response) { // Return contents of a file
-    if (checkAPIKey(request.param("apikey")) == true) {
-        var file = request.body.Body;
-        if (!fs.lstatSync(file).isDirectory()) {
-            fs.readFile("./" + file, {
-                encoding: "utf8"
-            }, function(err, data) {
-                if (!err) {
-                    response.send(data);
-                } else {
-                    console.log(err);
-                }
-
-            });
-        } else {
-            fs.readdir(dir + "/" + file, function(err, items) {
-                files = items;
-                response.send(JSON.stringify({
-                    "isdirectory": "true",
-                    files
-                }));
-            });
-        }
-    } else {
-        response.send("Invalid API key");
-    }
-});
-
-app.post("/savefile", function(request, response) { // Save a POST"d file
-    if (checkAPIKey(request.param("apikey")) == true) {
-        var file = request.param("File");
-        var newcontents = request.param("Contents");
-
-        fs.writeFile(dir + "/" + file, newcontents, function(err) {
-            if (err) {
-                return console.log(err);
-            } else {
-                console.log("File " + file + " saved");
-            }
-
-        });
-    } else {
-        response.send("Invalid API key");
-    }
-});
-
-app.get("/info", function(request, response) { // Return server info as JSON object
-    var props = getServerProps();
-    var serverInfo = [];
-    if (props !== null) {
-        serverInfo.push(props.get("motd")); // message of the day
-        serverInfo.push(props.get("server-port")); // server port
-        serverInfo.push(props.get("white-list")); // if whitelist is on or off
-    } else {
-        serverInfo.push("Failed to get MOTD.");
-        serverInfo.push("Failed to get port.");
-        serverInfo.push(false);
-    }
-    serverInfo.push(serverOptions.jar + " " + serverOptions.version); // server jar version
-    serverInfo.push(outsideip); // outside ip
-    serverInfo.push(serverOptions.id); //
-    response.send(JSON.stringify(serverInfo));
-});
 
 app.delete("/deletefile", function(request, response) {
     if (checkAPIKey(request.body.apikey) == true) {

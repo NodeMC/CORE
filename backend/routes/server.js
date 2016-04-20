@@ -71,8 +71,8 @@ module.exports = (Router, server) => {
    *
    * Execute a command on the server.
    **/
-  Router.post("/execute", function(req, res) {
-    const command = request.param("Body");
+  Router.post("/execute", (req, res) => {
+    const command = req.param("Body");
     if (command == "stop") {
       server.running = false;
     } else if (command == "restart") {
@@ -91,8 +91,44 @@ module.exports = (Router, server) => {
 
     setTimeout(function() {
       server.spawn.stdout.removeListener("data", collector);
-      response.success(buffer.join(""));
+      res.success(buffer.join(""));
     }, 250);
+  });
+
+  /**
+   * GET /log
+   *
+   * @todo IMPLEMENT ASAP. needs access to the log object. consume the stream?
+   *
+   * Get the server's log.
+   **/
+  Router.get("/log", (req, res) => {
+    return res.error("not_implemented", {
+      moreinfo: "Bug @jaredallard to stop being lazy and finish this."
+    });
+  });
+
+  /**
+   * GET /info
+   *
+   * Get server info.
+   **/
+  Router.get("/info", function(request, response) { // Return server info as JSON object
+      var props = getServerProps();
+      var serverInfo = [];
+      if (props !== null) {
+          serverInfo.push(props.get("motd")); // message of the day
+          serverInfo.push(props.get("server-port")); // server port
+          serverInfo.push(props.get("white-list")); // if whitelist is on or off
+      } else {
+          serverInfo.push("Failed to get MOTD.");
+          serverInfo.push("Failed to get port.");
+          serverInfo.push(false);
+      }
+      serverInfo.push(serverOptions.jar + " " + serverOptions.version); // server jar version
+      serverInfo.push(outsideip); // outside ip
+      serverInfo.push(serverOptions.id); //
+      response.send(JSON.stringify(serverInfo));
   });
 
   return Router;
