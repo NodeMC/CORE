@@ -42,13 +42,9 @@ module.exports = (Router, server) => {
    *
    * Stop the server.
    **/
-  Router.post("/stopserver", (req, res) => { // Stop server
-    if (!server.running) {
-      server.execute("stop");
-      server.running = true;
-    }
-
-    return res.sucess();
+  Router.post("/stop", (req, res) => {
+    server.stopServer("Stopping Server...", () => {});
+    return res.success();
   });
 
   /**

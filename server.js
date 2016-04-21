@@ -200,9 +200,8 @@ async.waterfall([
     //checkVersion();
     console.log("Starting server...");
 
-    server.startServer();
     server.setport(port);
-    server.restartServer();
+    server.startServer();
 
     console.log("Server running at localhost:" + port);
     console.log("API Key: " + apikey);
