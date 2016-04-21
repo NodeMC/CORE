@@ -44,7 +44,7 @@
   "author": "Gabriel Simmer <gabriel@nodemc.spac>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/NodeMC/NodeMC-COREissues"
+    "url": "https://github.com/NodeMC/NodeMC-CORE/issues"
   },
   "homepage": "https://nodemc.space/"
 }
