@@ -336,21 +336,25 @@ app.get('/download/:file', function(request, response) {
         }
     };
     var file = querystring.unescape(request.params.file);
-    if (!fs.lstatSync(file).isDirectory()) {
-        fs.readFile("./" + file, {
-            encoding: 'utf-8'
-        }, function(err, data) {
-            if (!err) {
-                response.download(file);
-            } else {
-                response.send("file not found");
-            }
+    if (file !== "server_files/properties.json") {
+        if (!fs.lstatSync(file).isDirectory()) {
+            fs.readFile("./" + file, {
+                encoding: 'utf-8'
+            }, function(err, data) {
+                if (!err) {
+                    response.download(file);
+                } else {
+                    response.send("file not found");
+                }
 
-        });
+            });
+        } else {
+            fs.readdir(dir + '/' + file, function(err, items) {
+
+            });
+        }
     } else {
-        fs.readdir(dir + '/' + file, function(err, items) {
-
-        });
+        response.send("Restricted file");
     }
 });
 
