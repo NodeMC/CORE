@@ -10,6 +10,12 @@
 const authCheck = require("../../lib/auth.js");
 
 module.exports = (Router, server) => {
+
+  /**
+   * POST /verify
+   *
+   * Verify if API key is valid or not.
+   **/
   Router.post("/verify", (req, res) => {
     let apikey = server.config.nodemc.apikey;
     let check  = req.body.apikey || req.get("Authentication");

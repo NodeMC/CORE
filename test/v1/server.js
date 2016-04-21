@@ -1,6 +1,6 @@
 "use strict";
 
-const should  = require("should"),
+const expect  = require("chai").expect,
       assert  = require("assert"),
       spawn   = require("child_process").spawn,
       path    = require("path"),
@@ -8,8 +8,11 @@ const should  = require("should"),
 
 // Test Helpers
 let failsWithoutAuthentication = require("../helpers/auth.js");
-let restartServer              = require("../helpers/server.js");
 let config                     = require("../helpers/config.js")();
+let Server                     = require("../helpers/server.js");
+let Production                 = require("../helpers/production.js");
+
+let production = new Production();
 
 // Constants
 const port   = config.nodemc.port;
@@ -17,8 +20,7 @@ const apikey = config.nodemc.apikey;
 
 describe("/v1/server", () => {
   let url = "http://127.0.0.1:"+port+"/v1/server";
-
-  beforeEach(restartServer);
+  let server     = new Server();
 
   describe("/status", () => {
     it("should fail when not authenticated", (next) => {
@@ -34,10 +36,35 @@ describe("/v1/server", () => {
           return next(err);
         }
 
-        if(res.body.data !== "down") {
-          let stringified = JSON.stringify(res.body.data, null, 1);
-          return next(new Error("Expected: 'down', got: \n"+stringified));
+        expect(res.body.data).to.deep.equal("down");
+
+        return next();
+      });
+    });
+
+    it("production on", (next) => {
+      production.on((success) => {
+        if(!success) {
+          return next(new Error("Failed to switch to production"));
         }
+
+        console.log("SERVER: Restart")
+        server.restart(() => {
+          return next();
+        });
+      });
+    });
+
+    it("should return up on init", (next) => {
+      request(url).get("/status")
+      .set("Authentication", apikey)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .end((err, res) => {
+        if(err) {
+          return next(err);
+        }
+
+        expect(res.body.data).to.deep.equal("up");
 
         return next();
       });

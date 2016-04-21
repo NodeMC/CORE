@@ -4,8 +4,9 @@
     "ram": "512M",
     "port": 25565,
     "dir": "./minecraft",
-    "jar": "",
-    "version": ""
+    "jar": "vanilla",
+    "jarfile": "vanilla.1.9.jar",
+    "version": "1.9"
   },
   "nodemc": {
     "apikey": "3808e65d80bbe3fe373485c30f5dd830",

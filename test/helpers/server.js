@@ -3,21 +3,66 @@
 const spawn = require("child_process").spawn,
       path  = require("path");
 
-module.exports = (cb) => {
-  let base   = path.join(__dirname, "../..");
-  let server = path.join(base, "server.js");
+let self  = null;
 
-  let sp = spawn("node", [server], {
-    cwd: base
-  });
+module.exports = class Server {
+  constructor() {
+    this.base   = path.join(__dirname, "../..");
+    this.server = path.join(this.base, "server.js");
+    this.proc   = null;
 
-  sp.on("error", err => {
-    console.error("ERROR:", err);
-  })
+    self = this;
+  }
 
-  sp.on("close", code => {
-    console.log("server close with", code);
-  });
+  /**
+   * Stop the Server.
+   *
+   * @param {Function} next - callback
+   * @returns {undefined} use callback.
+   **/
+  stop(next) {
+    if(!self.proc) {
+      new Error("Tried to Restart When Not Running")
+      return next();
+    }
 
-  return cb();
+    this.proc.on("exit", function() {
+      console.log("SERVER: killed.")
+
+      return next();
+    });
+
+    this.proc.kill();
+
+    console.log("SERVER: Attempted to kill.")
+  }
+
+  /**
+   * Restart the Server.
+   *
+   * @param {Function} next - callback
+   * @returns {undefined} use callback.
+   **/
+  restart(next) {
+    self.stop(() => {
+      self.start(next);
+    })
+  }
+
+  /**
+   * Start the Server.
+   *
+   * @param {Function} next - callback
+   * @returns {undefined} use callback.
+   **/
+  start(next) {
+    this.proc = spawn("node", [this.server], {
+      cwd: self.base
+    });
+
+    //this.proc.stdout.pipe(process.stdout);
+    //this.proc.stderr.pipe(process.stderr);
+
+    return next();
+  }
 }
