@@ -25,7 +25,7 @@ module.exports = (Router, server) => {
       }
 
       let files = items;
-      res.succes({
+      res.success({
         contents: files
       });
     });
@@ -111,7 +111,7 @@ module.exports = (Router, server) => {
         });
       }
 
-      res.success();
+      res.success(true);
     });
   });
 

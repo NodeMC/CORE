@@ -10,7 +10,7 @@
   <meta name="author" content="">
   <link rel="icon" href="http://v4-alpha.getbootstrap.com/favicon.ico">
   <title>NodeMC</title>
-  
+
   <!-- Bootstrap core CSS -->
   <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/darkly/bootstrap.min.css" rel="stylesheet">
 </head<
@@ -50,18 +50,17 @@
       <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="name" rows="32" id="log" class="form-control"></textarea>
     </div>
   </div>
+
+  <br />
+
   <div class="container col-sm-offset-3">
     <div class="row">
-      <form action="/command" method="post" enctype="text/plain">
-        <fieldset class="form-group">
-        </fieldset>
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button">Execute</button>
-          </span>
-          <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="text" class="form-control" id="command" name="Body" placeholder="command">
-        </div>
-      </form>
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" onclick="">Execute</button>
+        </span>
+        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="text" class="form-control" id="command" name="Body" placeholder="command">
+      </div>
     </div>
   </div>
   </div>
@@ -70,5 +69,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
   <script src="/js/server.js"></script>
+  <script src="/js/apikey.js"></script>
+  <script src="/js/getlog.js"></script>
 </body>
 </html>

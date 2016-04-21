@@ -72,7 +72,7 @@ module.exports = (Router, server) => {
    * Execute a command on the server.
    **/
   Router.post("/execute", (req, res) => {
-    const command = req.param("Body");
+    const command = req.param("command");
     if (command == "stop") {
       server.running = false;
     } else if (command == "restart") {

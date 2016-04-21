@@ -55,7 +55,11 @@ Server.prototype.request = function(method, endpoint, data, next) {
   })
   .done(function(data) {
     if(data.success !== true) {
-      return next(data.message);
+      return next({
+        message: data.message,
+        debuginfo: data.data.debuginfo,
+        moreinfo: data.data.moreinfo
+      });
     }
 
     return next(false, data.data);
@@ -84,3 +88,23 @@ Server.prototype.delete  = function(endpoint, data, next) {
 Server.prototype.setApiKey = function(key) {
   this.apikey = key;
 }
+
+/**
+ * Verify the Key we're registered to use.
+ *
+ * @param {Function} next - callback
+ *
+ * @returns {undefined} use callback.
+ **/
+Server.prototype.verifyKey = function(next) {
+  this.post("/auth/verify", {}, function(err, data) {
+    if(data === true) {
+      return next(true);
+    }
+
+    // Fail by default.
+    return next(false);
+  });
+}
+
+var server = new Server("http://127.0.0.1:3000", "v1");

@@ -1,15 +1,31 @@
 var key = getApiKey();
 
 $("#restart").click(function() {
-  $.post('/restartserver', {apikey: key}, function() {});
+  server.post("/server/restart", {}, function(err) {
+    if(err) {
+      return console.error(err);
+    }
+  });
 });
+
 $("#stop").click(function() {
-  $.post('/stopserver', {apikey: key}, function() {});
+  server.post("/server/stop", {}, function(err) {
+    if(err) {
+      return console.error(err);
+    }
+  });
+
   $("#start").show();
   $("#stop").hide();
 });
+
 $("#start").click(function() {
-  $.post('/startserver', {apikey: key}, function() {});
+  server.post("/server/start", {}, function(err) {
+    if(err) {
+      return console.error(err);
+    }
+  });
+
   $("#stop").show();
   $("#start").hide();
 });
