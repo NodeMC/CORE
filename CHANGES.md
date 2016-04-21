@@ -274,8 +274,9 @@ the new format.
     "ram": "512M",
     "port": 25565,
     "dir": "./minecraft",
-    "jar": "",
-    "version": ""
+    "jar": "flavour", // i.e vanilla, spigot
+    "jarfile": "vanilla.whatever.jar",
+    "version": "" // minecraft version
   },
   "nodemc": {
     "apikey": "3808e65d80bbe3fe373485c30f5dd830",

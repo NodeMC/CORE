@@ -7,7 +7,9 @@
 
 "use strict";
 
-const authCheck = require("../../lib/auth.js");
+const authCheck = require("../../lib/auth.js"),
+      path      = require("path"),
+      fs        = require("fs");
 
 module.exports = (Router, server) => {
   Router.use(authCheck(server));
@@ -68,40 +70,35 @@ module.exports = (Router, server) => {
    * Execute a command on the server.
    **/
   Router.post("/execute", (req, res) => {
-    const command = req.param("command");
-    if (command == "stop") {
+    const command = req.body.command;
+
+    if (command === "stop") {
       server.running = false;
-    } else if (command == "restart") {
+    } else if (command === "restart") {
       server.restartServer();
     }
 
     server.execute(command);
 
-    let buffer = [];
-    let collector = function(data) {
-      data = data.toString();
-      buffer.push(data.split("]: ")[1]);
-    };
-
-    server.spawn.stdout.on("data", collector);
-
-    setTimeout(function() {
-      server.spawn.stdout.removeListener("data", collector);
-      res.success(buffer.join(""));
-    }, 250);
+    return res.success(true);
   });
 
   /**
    * GET /log
    *
-   * @todo IMPLEMENT ASAP. needs access to the log object. consume the stream?
-   *
    * Get the server's log.
    **/
   Router.get("/log", (req, res) => {
-    return res.error("not_implemented", {
-      moreinfo: "Bug @jaredallard to stop being lazy and finish this."
-    });
+    fs.exists(server.log.path, exists => {
+      if(!exists) {
+        res.status(501);
+        return res.send();
+      }
+
+      return res.sendFile(server.log.path, {
+        root: path.join(server.config.minecraft.dir, "../")
+      });
+    })
   });
 
   /**

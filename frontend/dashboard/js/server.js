@@ -54,12 +54,16 @@ Server.prototype.request = function(method, endpoint, data, next) {
     return next(err);
   })
   .done(function(data) {
-    if(data.success !== true) {
+    if(data.success === false) {
       return next({
         message: data.message,
         debuginfo: data.data.debuginfo,
         moreinfo: data.data.moreinfo
       });
+    }
+
+    if(typeof data !== "object") {
+      return next(false, data);
     }
 
     return next(false, data.data);

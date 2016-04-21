@@ -25,25 +25,26 @@ function getlogs() {
 }
 setInterval(getlogs, 500);
 
-$(document).ready(function() {
-  var $form = $("form");
-  $form.submit(function() {
-    var celm = $("#command");
-    var command = celm.val();
-    console.log("execute on server:", command);
+function executeCommand() {
+  var celm = $("#command");
+  var command = celm.val();
 
-    celm.disable();
+  console.log("execute on server:", command);
 
-    server.post("/server/execute", {
-      command: command
-    }, function(err) {
-      if(err) {
-        return console.error(err);
-      }
+  celm.prop('disabled', true);
 
-      $("#command").val("");
-    })
+  server.post("/server/execute", {
+    command: command
+  }, function(err) {
+    if(err) {
+      return console.error(err);
+    }
 
-    return false;
-  });
-});
+    console.log("Executed!")
+
+    celm.prop('disabled', false);
+    $(celm).val("");
+  })
+
+  return false;
+}

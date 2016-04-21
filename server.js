@@ -210,3 +210,13 @@ async.waterfall([
   }
   console.log("Navigate to http://localhost:" + config.nodemc.port + " to set up NodeMC.");
 });
+
+process.on("exit", () => {
+  try {
+    server.log.stream.close();
+    console.log("Closed minecraft.log stream.")
+  } catch(e) {
+    console.error(e)
+    console.error("Failed to close the Minecraft server log stream.")
+  }
+})
