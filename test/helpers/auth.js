@@ -1,6 +1,7 @@
 "use strict";
 
-const request = require("supertest");
+const request = require("supertest"),
+      expect  = require("chai").expect;
 
 module.exports = (url, endpoint, next) => {
   request(url).get(endpoint)
@@ -10,10 +11,7 @@ module.exports = (url, endpoint, next) => {
       return next(err);
     }
 
-    if(res.body.success) {
-      let stringified = JSON.stringify(res.body, null, 1);
-      return next(new Error("Expected: success: false, got: \n"+stringified));
-    }
+    expect(res.body.success).to.equal(false);
 
     return next();
   });
