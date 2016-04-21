@@ -79,6 +79,8 @@ module.exports = (Router, server) => {
             return next("Failed to obtain jar file.");
           }
 
+          details.minecraft.jarfile = jar + "." + ver + ".jar";
+
           return next();
         });
       },
