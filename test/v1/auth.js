@@ -1,8 +1,6 @@
 "use strict";
 
-const should  = require("should"),
-      assert  = require("assert"),
-      spawn   = require("child_process").spawn,
+const expect  = require("chai").expect,
       path    = require("path"),
       request = require("supertest");
 
@@ -19,10 +17,18 @@ let server     = new Server();
 const port   = config.nodemc.port;
 const apikey = config.nodemc.apikey;
 
+after(() => {
+  server.stop(()=>{});
+});
+
 describe("/v1/auth", () => {
   let url = "http://127.0.0.1:"+port+"/v1/auth";
 
-  server.start(() => {});
+  it("server should start", (done) => {
+    server.start(() => {
+      return done();
+    });
+  });
 
   describe("/verify", () => {
     it("should return true with valid key", (next) => {
@@ -34,10 +40,7 @@ describe("/v1/auth", () => {
           return next(err);
         }
 
-        if(res.body.data !== true) {
-          let stringified = JSON.stringify(res.body.data, null, 1);
-          return next(new Error("Expected: true, got: \n"+stringified));
-        }
+        expect(res.body.data).to.equal(true);
 
         return next();
       });
@@ -52,10 +55,8 @@ describe("/v1/auth", () => {
           return next(err);
         }
 
-        if(res.body.message === "internal_authentication" && res.body.success === false) {
-          let stringified = JSON.stringify(res.body.data, null, 1);
-          return next(new Error("Expected: message: internal_authentication, got: \n"+stringified));
-        }
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal("invalid_authentication")
 
         return next();
       });

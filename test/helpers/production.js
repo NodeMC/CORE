@@ -39,7 +39,9 @@ module.exports = class Production {
 
   off(next) {
     this.in     = false;
-    fs.unlinkSync(path.join(this.config.production));
+    if(fs.existsSync(this.config.production)) {
+      fs.unlinkSync(path.join(this.config.production));  
+    }
 
     return next(false);
   }

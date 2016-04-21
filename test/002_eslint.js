@@ -2,10 +2,9 @@
 
 const lint = require("mocha-eslint");
 const paths = [
-  "bin",
-  "backend/routes/*",
-  "lib/*",
-  "server.js"
+  "./backend/routes/*",
+  "./lib/*",
+  "./server.js"
 ];
 
 // Specify style of output

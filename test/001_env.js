@@ -4,10 +4,15 @@
 
 "use strict";
 
-const fs   = require("fs"),
-      path = require("path");
+const fs     = require("fs"),
+      path   = require("path"),
+      mkdirp = require("mkdirp");
 
 const jar  = require("../lib/serverjar.js");
+
+const Production = require("./helpers/production.js");
+const config     = require("./helpers/config.js")();
+const production = new Production();
 
 let cp = path.join(__dirname, "../config");
 let cold = path.join(cp, "config.json");
@@ -15,7 +20,7 @@ let cnew = path.join(cp, "config.production.json");
 
 describe("pre-test", () => {
   it("config assuredly contains no production config", (done) => {
-    if(fs.existsSync(cnew)) {
+    if(fs.existsSync(cnew) && fs.existsSync(cold)) {
       fs.unlinkSync(cold);
       return done();
     }
@@ -34,9 +39,19 @@ describe("pre-test", () => {
     }
   });
 
-  it("can download minecraft example version", (done) => {
-    let config = require(cold);
+  it("is set to production off", (done) => {
+    return production.off(done);
+  })
 
+  it("minecraft dir exists", (done) => {
+    if(!fs.existsSync(config.minecraft.dir)) {
+      mkdirp.sync(config.minecraft.dir);
+    }
+
+    return done();
+  });
+
+  it("can download minecraft example version", (done) => {
     const flavour = config.minecraft.jar;
     const dir     = path.join(config.minecraft.dir);
     const version = config.minecraft.version;

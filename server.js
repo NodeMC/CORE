@@ -29,7 +29,6 @@ const async             = require("async");
 const path              = require("path");
 const express           = require("express");
 const fs                = require("node-fs");
-const crypto            = require("crypto");
 const morgan            = require("morgan");
 const mkdirp            = require("mkdirp");
 const cors              = require("cors");
@@ -64,18 +63,7 @@ async.waterfall([
     let logger;
     let logDirectory = config.nodemc.logDirectory;
 
-    stage.start(0, "preinit", "INIT");
-
-    // Error Handler
-    process.on("exit", () => { // When it exits kill the server process too
-      if(server.spawn) server.spawn.kill(2);
-    });
-
-    if(server.spawn) {
-      server.spawn.on("exit", () => {
-        // to do re implement server restart defferel
-      });
-    }
+    stage.start(0, "preinit", "INIT");-
 
     // Settup the logger
     fs.exists(logDirectory, exists => {
@@ -214,7 +202,11 @@ async.waterfall([
 process.on("exit", () => {
   try {
     server.log.stream.close();
-    console.log("Closed minecraft.log stream.")
+    console.log("Closed minecraft.log stream.");
+    if(server.spawn) {
+      // In Theory this is already done.... child_process cannot exists when parent closes.
+      server.spawn.kill(2);
+    }
   } catch(e) {
     console.error(e)
     console.error("Failed to close the Minecraft server log stream.")

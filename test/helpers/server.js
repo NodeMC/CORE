@@ -27,14 +27,13 @@ module.exports = class Server {
     }
 
     this.proc.on("exit", function() {
-      console.log("SERVER: killed.")
-
+      // console.log("SERVER: killed.")
       return next();
     });
 
-    this.proc.kill();
+    this.proc.kill("SIGKILL");
 
-    console.log("SERVER: Attempted to kill.")
+    // console.log("SERVER: Attempted to kill.")
   }
 
   /**
@@ -60,9 +59,13 @@ module.exports = class Server {
       cwd: self.base
     });
 
-    //this.proc.stdout.pipe(process.stdout);
-    //this.proc.stderr.pipe(process.stderr);
+    // console.log("SERVER: Started.")
 
-    return next();
+    // this.proc.stdout.pipe(process.stdout);
+    this.proc.stderr.pipe(process.stderr);
+
+    setTimeout(() => {
+      return next();
+    }, 1500)
   }
 }
