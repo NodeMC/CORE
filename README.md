@@ -1,5 +1,11 @@
 # NodeMC-CORE
 
-This is a fork of the wonderful project [NodeMC](https://github.com/NodeMC).
+The RC for the PR to NodeMC:v6
 
-Check out what's changed and implemented (may not be up to date) here: [CHANGES.md](https://github.com/jaredallard/NodeMC-CORE/blob/master/CHANGES.md)
+## Bugs
+
+https://github.com/jaredallard/NodeMC-CORE/issues
+
+## license
+
+GPLv3
