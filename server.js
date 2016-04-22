@@ -205,7 +205,7 @@ process.on("exit", () => {
     console.log("Closed minecraft.log stream.");
     if(server.spawn) {
       // In Theory this is already done.... child_process cannot exists when parent closes.
-      server.spawn.kill(2);
+      server.spawn.kill();
     }
   } catch(e) {
     console.error(e)

@@ -1,5 +1,7 @@
-var key = getApiKey();
-
+/**
+ * Server Button Control
+ **/
+ 
 $("#restart").click(function() {
   server.post("/server/restart", {}, function(err) {
     if(err) {
