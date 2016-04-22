@@ -13,12 +13,15 @@ checkAPIKey(function(status) {
 
     // really getting lazy at this point.
     prop = data;
-    $("#version").text("Version: " + prop[3]);
-    $("#ip").text("IP: " + prop[4]);
-    $("#motd").text("Message of the day: " + prop[0]);
-    $("#port").text("Port: " + prop[1]);
-    if(prop[2]==true){ whitelist = "On" ;}
-    else{ whitelist = "Off" ;}
+    $("#version").text("Version: " + prop.version);
+    $("#ip").text("IP: not implemented");
+    $("#motd").text("Message of the day: " + prop.motd);
+    $("#port").text("Port: " + prop.serverPort);
+    if(prop.whiteList == true) {
+      whitelist = "On";
+    } else {
+      whitelist = "Off";
+    }
     $("#whitelist").text("Whitelist: " + whitelist);
   })
 
