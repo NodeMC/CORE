@@ -2,32 +2,55 @@
 
 const expect  = require("chai").expect,
       path    = require("path"),
-      request = require("supertest");
+      request = require("supertest"),
+      spawn   = require("child_process").spawn;
 
 // Test Helpers
-let failsWithoutAuthentication = require("../helpers/auth.js");
 let config                     = require("../helpers/config.js")();
-let Server                     = require("../helpers/server.js");
-let Production                 = require("../helpers/production.js");
-
-let production = new Production();
-let server     = new Server();
+let srv;
 
 // Constants
 const port   = config.nodemc.port;
 const apikey = config.nodemc.apikey;
 
-after(() => {
-  server.stop(()=>{});
-});
-
 describe("/v1/auth", () => {
   let url = "http://127.0.0.1:"+port+"/v1/auth";
 
-  it("server should start", (done) => {
-    server.start(() => {
-      return done();
-    });
+  beforeEach((next) => {
+    let deffer = (cb) => {
+      srv     = null;
+      srv     = spawn("node", ["server.js"], {
+        cwd: path.join(__dirname, "../..")
+      });
+
+      // srv.stderr.pipe(process.stderr);
+      setTimeout(() => {
+        return cb();
+      }, 500)
+    }
+
+    if(srv) {
+      srv.on("exit", () => {
+        srv.removeAllListeners("exit");
+        return deffer(next);
+      });
+
+      return srv.kill();
+    }
+
+    return deffer(next);
+  });
+
+  after((next) => {
+    if(srv) {
+      srv.on("exit", () => {
+        srv.removeAllListeners("exit");
+        return next();
+      });
+
+      return srv.kill();
+    }
+
   });
 
   describe("/verify", () => {

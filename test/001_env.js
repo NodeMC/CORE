@@ -10,9 +10,7 @@ const fs     = require("fs"),
 
 const jar  = require("../lib/serverjar.js");
 
-const Production = require("./helpers/production.js");
 const config     = require("./helpers/config.js")();
-const production = new Production();
 
 let cp = path.join(__dirname, "../config");
 let cold = path.join(cp, "config.json");
@@ -38,10 +36,6 @@ describe("pre-test", () => {
       return done();
     }
   });
-
-  it("is set to production off", (done) => {
-    return production.off(done);
-  })
 
   it("minecraft dir exists", (done) => {
     if(!fs.existsSync(config.minecraft.dir)) {

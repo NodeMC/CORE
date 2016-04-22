@@ -31,12 +31,14 @@ module.exports = (Router, server) => {
    * Start the server.
    **/
   Router.post("/start", (req, res) => {
-    if (!server.running) {
-      server.setport();
-      server.startServer();
+    if (server.running) {
+      return res.error("already_running");
     }
 
-    return res.succes();
+    server.setport();
+    server.startServer();
+
+    return res.success();
   });
 
   /**
