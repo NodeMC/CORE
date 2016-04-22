@@ -11,7 +11,7 @@ module.exports = (url, endpoint, next) => {
       return next(err);
     }
 
-    expect(res.body.success).to.equal(false);
+    expect(res.body).to.have.all.keys("success", "message", "data")
 
     return next();
   });

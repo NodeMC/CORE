@@ -176,11 +176,77 @@ describe("/v1/server", () => {
     it("should fail when not authenticated", (next) => {
       failsWithoutAuthentication(url, "/stop", next);
     });
+
+    it("should fail when not running", (done) => {
+      request(url).post("/stop")
+      .set("Authentication", apikey)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .end((err, res) => {
+        if(err) {
+          return done(err);
+        }
+
+        expect(res.body.success).to.equal(false)
+
+        return done();
+      });
+    });
+
+    it("should succedd when running", (done) => {
+      async.waterfall([
+        (next) => {
+          request(url).post("/start")
+          .set("Authentication", apikey)
+          .expect("Content-Type", "application/json; charset=utf-8")
+          .end((err, res) => {
+            if(err) {
+              return next(err);
+            }
+
+            expect(res.body.success).to.equal(true)
+
+            return next();
+          });
+        },
+
+        (next) => {
+          request(url).post("/stop")
+          .set("Authentication", apikey)
+          .expect("Content-Type", "application/json; charset=utf-8")
+          .end((err, res) => {
+            if(err) {
+              return next(err);
+            }
+
+            expect(res.body.success).to.equal(true)
+
+            return next();
+          });
+        }
+      ], err => {
+        return done(err);
+      })
+    });
   });
 
   describe("/restart", () => {
     it("should fail when not authenticated", (next) => {
       failsWithoutAuthentication(url, "/restart", next);
+    });
+
+    it("should never fail when authenticated", (done) => {
+      request(url).post("/restart")
+      .set("Authentication", apikey)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .end((err, res) => {
+        if(err) {
+          return done(err);
+        }
+
+        expect(res.body.success).to.equal(true);
+
+        return done();
+      });
     });
   });
 
@@ -188,11 +254,69 @@ describe("/v1/server", () => {
     it("should fail when not authenticated", (next) => {
       failsWithoutAuthentication(url, "/execute", next);
     });
+
+    it("should not fail when sent a command", (done) => {
+      request(url).post("/restart")
+      .set("Authentication", apikey)
+      .send({
+        "comamnd": "say Test!"
+      })
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .end((err, res) => {
+        if(err) {
+          return done(err);
+        }
+
+        expect(res.body.success).to.equal(true);
+
+        return done();
+      });
+    });
   });
 
   describe("/log", () => {
     it("should fail when not authenticated", (next) => {
       failsWithoutAuthentication(url, "/log", next);
+    });
+
+    it("should return a file", (done) => {
+      request(url).get("/log")
+      .set("Authentication", apikey)
+      .end((err, res) => {
+        if(err) {
+          return done(err);
+        }
+
+        return done();
+      })
+    })
+  });
+
+  describe("/info", () => {
+    it("should fail when not authenticated", (next) => {
+      failsWithoutAuthentication(url, "/info", next);
+    });
+
+    it("should return an object of data", (done) => {
+      request(url).get("/info")
+      .set("Authentication", apikey)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .end((err, res) => {
+        if(err) {
+          return done(err);
+        }
+
+        expect(res.body.data).to.have.all.keys(
+          "whiteList",
+          "serverPort",
+          "flavour",
+          "motd",
+          "flavor",
+          "version"
+        );
+
+        return done();
+      });
     });
   });
 });

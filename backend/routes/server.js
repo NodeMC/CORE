@@ -22,7 +22,7 @@ module.exports = (Router, server) => {
   Router.post("/restart", (req, res) => { // Restart server
     server.restartServer();
 
-    return res.send();
+    return res.success();
   });
 
   /**
@@ -47,7 +47,12 @@ module.exports = (Router, server) => {
    * Stop the server.
    **/
   Router.post("/stop", (req, res) => {
+    if (!server.running) {
+      return res.error("not_running");
+    }
+
     server.stopServer("Stopping Server...", () => {});
+
     return res.success();
   });
 
@@ -110,22 +115,25 @@ module.exports = (Router, server) => {
    **/
   Router.get("/info", (req, res) => { // Return server info as JSON object
     const props = server.getServerProps();
-    let serverInfo = [];
     if(!props) {
       return res.error("internal", {
         moreinfo: "Failed to get props."
       });
     }
 
-    let ver = server.config.minecraft.ver,
+    let ver = server.config.minecraft.version,
         jar = server.config.minecraft.jar;
 
-    serverInfo.push(props.get("motd")); // message of the day
-    serverInfo.push(props.get("server-port")); // server port
-    serverInfo.push(props.get("white-list")); // if whitelist is on or off
-    serverInfo.push(jar + " " + ver);
+    let info = {
+      motd: props.get("motd"),
+      serverPort: props.get("server-port"),
+      whiteList: props.get("white-list"),
+      flavor: jar,
+      flavour: jar,
+      version: ver || null
+    }
 
-    res.success(serverInfo);
+    res.success(info);
   });
 
   return Router;
