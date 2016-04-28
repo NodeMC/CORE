@@ -39,6 +39,7 @@ const bodyP             = require("body-parser");
 const stage     = require("./lib/stage.js");
 const Server    = require("./lib/server.js");
 const Routes    = require("./lib/express.js");
+const Update    = require("./lib/autoupdate.js");
 
 // config for now.
 let config;
@@ -48,6 +49,14 @@ try {
   console.error("Failed to read config. This is OK on first run.")
   config = require("./config/config.example.json");
 }
+
+let updater = new Update();
+
+updater.checkVersion(config.nodemc.version, function(isupdate){
+  if(isupdate){
+    updater.updateGit(function(success){});
+  }
+});
 
 // instance the server
 let app = new express();
@@ -185,7 +194,6 @@ async.waterfall([
         apikey = config.nodemc.apikey;
 
     // Start then restart server for things to take effect
-    //checkVersion();
     console.log("Starting server...");
 
     server.setport(port);
