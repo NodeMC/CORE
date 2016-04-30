@@ -10,7 +10,7 @@
   },
   "nodemc": {
     "apikey": "3808e65d80bbe3fe373485c30f5dd830",
-    "version": "150",
+    "version": "160",
     "port": 3000,
     "logDirectory": "./logs"
   },
