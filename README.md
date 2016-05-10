@@ -1,6 +1,6 @@
 # CORE
 
-[![Build Status](http://ci.nodemc.space/buildStatus/icon?job=NodeMC)](http://nodemc.space:8080/job/NodeMC/) [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000)](https://gitter.im/gmemstr/nodemc)
+[![Build Status](http://ci.nodemc.space/buildStatus/icon?job=NodeMC)](http://nodemc.space:8080/job/NodeMC/) [![Gitter](https://img.shields.io/badge/slack-community-brightgreen.svg)](https://nodemc.space/slack/)
 
 ## About
 
