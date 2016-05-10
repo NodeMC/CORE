@@ -51,12 +51,23 @@ Then navigate to http://localhost:3000 and go through the setup processs.
 
 ## Contributing
 
+### Wall of Fame
+
+[Mathew Da Costa](https://github.com/md678685) for his incredible work on the plugin system
+and for his continued support of NodeMC. :thumbsup:
+
+[Jared Allard](https://github.com/jaredallard) for his immense contributions of rewriting NodeMC
+using ES6 sepcifications and the default dashboard in React. :heart:
+
 I welcome contributions from other developers, however there are a few
 things you should keep in mind when making a pull request.
 
 First things first, pull requests will never be accepted to the master branch
 unless there is an important security or performance patch. Otherwise, they will be
 merged to whichever is the newest upcoming version of NodeMC (v7).
+
+Second, if you are considering a major rewrite of a particular component of NodeMC,
+be sure to run it by me in the Gitter (@gmemstr) so I can be aware of your proposed changes.
 
 ## Building
 
