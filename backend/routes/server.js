@@ -102,8 +102,8 @@ module.exports = (Router, server) => {
         return res.send();
       }
 
-      return res.sendFile(server.log.path, {
-        root: path.join(server.config.minecraft.dir, "../")
+      return res.sendFile("minecraft.log", {
+        root: server.log.route
       });
     })
   });
