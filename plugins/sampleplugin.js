@@ -1,5 +1,5 @@
 class SamplePlugin {
-    constructor( loggerFunction) {
+    constructor(loggerFunction) {
         this.log = loggerFunction;
 
         loggerFunction("SamplePlugin has been constructed!")
@@ -28,7 +28,7 @@ module.exports = {
     name: "Sample Plugin", // Name of the plugin
     id: "space.nodemc.sampleplugin", // Unique ID for the plugin (formatted like a Java package)
     version: "1.0.0", // Version of the plugin
-    target: "2.0.0", // NodeMC Plugin API compatibility string - see node-semver for valid strings
+    target: "2.0.x", // NodeMC Plugin API compatibility range - see node-semver for valid strings
     desc: "Sample Plugin for NodeMC (Plugin API 2.0.0)", // Description of the plugin
     apiconf: { // Configuration for API access
         route: { // Configuration for route access
