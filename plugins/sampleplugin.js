@@ -1,15 +1,25 @@
 class SamplePlugin {
-    constructor(coreEvents, pluginEvents, loggerFunction) {
-        this.coreEvents = coreEvents;
-        this.pluginEvents = pluginEvents;
+    constructor( loggerFunction) {
         this.log = loggerFunction;
 
         loggerFunction("SamplePlugin has been constructed!")
     }
 
+    registerEvents(pluginEventWrapper) {
+        pluginEventWrapper.registerEvent("sample plugin event");
+    }
+
+    attachEvents(coreEventWrapper, pluginEventWrapper) {
+        this.coreEvents = coreEventWrapper;
+        this.pluginEvents = pluginEventWrapper;
+    }
+
     initRoutes(router) {
         // Initialise routes here!
         this.log("SamplePlugin is now (read: would be) initialising routes!")
+        router.get("helloworld", (req, res) => {
+            res.success("'Hello World!' says the NodeMC Sample Plugin")
+        })
         return router;
     }
 }
@@ -34,7 +44,10 @@ module.exports = {
     },
     comments: [ // Plugin comments
         "These won't get read by NodeMC.",
-        "You can include instructions for use, credits or whatever you want here."
+        "You can include instructions for use, credits or whatever you want here.",
+        "For example:",
+        "Credits: Gabriel Simmer (@gmemstr) for NodeMC itself, Jared Allard (@jaredallard) for the major rewrites and Mathew Da Costa (@md678685) for work on the plugin system",
+        "Instructions: Drop this in plugins/ and NodeMC will automatically load the plugin."
     ],
     plugin: SamplePlugin // The plugin class
 };
