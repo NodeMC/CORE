@@ -34,6 +34,7 @@ const mkdirp            = require("mkdirp");
 const cors              = require("cors");
 const FileStreamRotator = require("file-stream-rotator");
 const bodyP             = require("body-parser");
+const semver            = require("semver");
 
 // Internal Modules.
 const stage     = require("./lib/stage.js");
@@ -52,7 +53,7 @@ try {
 
 let updater = new Update();
 
-updater.checkVersion(config.nodemc.version, function(isupdate){
+updater.checkVersion(config.nodemc.version.core, function(isupdate){
   if(isupdate){
     updater.updateGit(function(success){});
   }
@@ -112,6 +113,12 @@ async.waterfall([
       app.use("/", express.static(config.dashboard.setup));
     } else {
       app.use("/", express.static(config.dashboard.dashboard));
+      fs.readFile(path.join(config.dashboard.dashboard, "compat.txt"), (err, data) => {
+        if (!semver.satisfies(config.nodemc.version.rest, data)) {
+          console.log("The installed dashboard does not appear to support this version of NodeMC!");
+          console.log("You may encounter issues with this dashboard - if so, please report this to the dashboard's developer.");
+        }
+      });
     }
 
     app.use(bodyP.json());
@@ -157,7 +164,7 @@ async.waterfall([
     })
 
     // Build the Express Routes.
-    let routes = new Routes(stage, app, server, function() {
+    let routes = new Routes(stage, app, server, config.nodemc.version.rest, function() {
       let args = Array.prototype.slice.call(arguments, 0);
       args[0]  = "main: "+stage.Sub+ " stage "+ stage.Stage + ": " + args[0];
       console.log.apply(console, args);

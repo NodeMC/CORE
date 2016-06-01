@@ -9,8 +9,10 @@
     "version": "1.9"
   },
   "nodemc": {
-    "apikey": "3808e65d80bbe3fe373485c30f5dd830",
-    "version": "160",
+    "apikey": "",
+    "version": {
+      "core": "6.0.0",
+      "rest": "2.0.0"},
     "port": 3000,
     "logDirectory": "./logs"
   },
