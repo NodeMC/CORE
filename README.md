@@ -57,7 +57,7 @@ Then navigate to http://localhost:3000 and go through the setup processs.
 and for his continued support of NodeMC. :thumbsup:
 
 [Jared Allard](https://github.com/jaredallard) for his immense contributions of rewriting NodeMC
-using ES6 sepcifications and the default dashboard in React. :heart:
+using ES6 sepcifications. :heart:
 
 I welcome contributions from other developers, however there are a few
 things you should keep in mind when making a pull request.
@@ -68,6 +68,11 @@ merged to whichever is the newest upcoming version of NodeMC (v7).
 
 Second, if you are considering a major rewrite of a particular component of NodeMC,
 be sure to run it by me in the Gitter (@gmemstr) so I can be aware of your proposed changes.
+
+Third, please make sure you follow the `.eslintrc` so that your code style is the same. Pull requests that do *not* pass
+the test to check this will *NOT* be accepted.
+
+Lastly, please try to use a node.js org commit style; `component: changes`. i.e `readme: update with new rules`.
 
 ## Building
 
@@ -84,35 +89,7 @@ should be available around the time of this branch being merged upstream.
 
 ## Credits
 
-**ExpressJS Components**
-
-[express](http://expressjs.com/)
-
-[body-parser](https://github.com/expressjs/body-parser)
-
-[cookie-parser](https://github.com/expressjs/cookie-parser)
-
-[cors](https://github.com/expressjs/cors)
-
-[morgan](https://github.com/expressjs/morgan)
-
-**Other NPM packages**
-
-[async](https://github.com/caolan/async) by caolan
-
-[external-ip](https://github.com/J-Chaniotis/external-ip) by J-Chaniotis
-
-[file-stream-rotator](https://github.com/holidayextras/file-stream-rotator) by holidayextras
-
-[mkdirp](https://github.com/substack/node-mkdirp) by substack
-
-[mocha](https://mochajs.org/) by MochaJS
-
-[node-fs](https://github.com/bpedro/node-fs) by bpedro
-
-[properties-reader](https://github.com/steveukx/properties) by steveukx
-
-[request](https://github.com/request/request) by request
+Various OSS modules are used in this project, please check `package.json` for the extended list of them.
 
 ## License
 
