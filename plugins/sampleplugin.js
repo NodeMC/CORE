@@ -1,26 +1,8 @@
 class SamplePlugin {
-    constructor(loggerFunction) {
-        this.log = loggerFunction;
+    constructor(api) {
+        this.log = api.logger.log();
 
-        loggerFunction("SamplePlugin has been constructed!")
-    }
-
-    registerEvents(pluginEventWrapper) {
-        pluginEventWrapper.registerEvent("sample plugin event");
-    }
-
-    attachEvents(coreEventWrapper, pluginEventWrapper) {
-        this.coreEvents = coreEventWrapper;
-        this.pluginEvents = pluginEventWrapper;
-    }
-
-    initRoutes(router) {
-        // Initialise routes here!
-        this.log("SamplePlugin is now (read: would be) initialising routes!")
-        router.get("helloworld", (req, res) => {
-            res.success("'Hello World!' says the NodeMC Sample Plugin")
-        })
-        return router;
+        this.log("SamplePlugin has been constructed!")
     }
 }
 
