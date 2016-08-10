@@ -16,6 +16,7 @@
     "mocha": "^2.4.5",
     "morgan": "^1.6.1",
     "node-fs": "^0.1.7",
+    "node-ipc": "^8.1.0",
     "properties-reader": "0.0.13",
     "request": "^2.69.0",
     "semver": "^5.1.0",
