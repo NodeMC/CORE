@@ -10,7 +10,8 @@
             },
             "nodemc": { // this section is different to regular nodemc section
                 "managed": true, // if false, NodeMC won't attempt to configure MC
-                "sockettype": "os", // Unix/Windows socket
-                "location": "nmcls1" // ID of Unix/Windows Socket
+                "sockettype": "os", // Unix/Windows socket (os) or TLS (net)
+                "location": "nmcls1", // ID of Unix/Windows Socket
+                "port": 24565 // Port for TLS Socket
             }
 }
