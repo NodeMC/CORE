@@ -34,9 +34,9 @@
     "minecraft"
   ],
   "author": "Gabriel Simmer",
-  "license": "MIT",
+  "license": "GPLv3",
   "bugs": {
-    "url": "https://github.com/NodeMC/NodeMC-COREissues"
+    "url": "https://github.com/NodeMC/NodeMC-CORE/issues"
   },
   "homepage": "https://nodemc.space/"
 }
