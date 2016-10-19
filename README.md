@@ -22,7 +22,7 @@ All you have to do is either [tweet me](https://twitter.com/gmem_) or open a new
 with whatever you wanted to add. I'll still answer issues and moderate pull request, but I
 personally will not be contributing much if any code.
 
-**If you're looking for v5 (stable), it's at the [v5-dep](https://github.com/NodeMC/CORE/blob/v5-dep/)
+**If you're looking for v5 (stable), it's at the [v5-dep](https://github.com/NodeMC/CORE/tree/v5-dep/)
 branch**. This is so I can still keep that code but also make sure you can see this message.
 
 Really sorry once again, but I hope you guys understand.
