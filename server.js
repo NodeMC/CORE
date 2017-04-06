@@ -52,12 +52,7 @@ try {
 }
 
 let updater = new Update();
-
-updater.checkVersion(config.nodemc.version.core, isupdate => {
-  if(!isupdate) return false;
-
-  updater.updateGit(function(success){});
-});
+updater.checkVersion(config.nodemc.version.core);
 
 // instance the server
 let app = new express();

@@ -21,6 +21,7 @@
     "semver": "^5.1.0"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.1",
     "chai": "^3.5.0",
     "mocha-eslint": "^2.0.2",
     "snyk": "^1.27.1",
