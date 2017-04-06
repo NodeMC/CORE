@@ -7,7 +7,7 @@
 
 "use strict";
 
-const serverjar = require("../../lib/serverjar.js"),
+const serverjar = require("../../lib/wrapper/serverjar.js"),
       mkdirp    = require("mkdirp"),
       async     = require("async"),
       fs        = require("fs");
