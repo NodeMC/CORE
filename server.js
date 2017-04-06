@@ -25,16 +25,18 @@
 "use strict";
 
 // Requires
-const async             = require("async");
 const path              = require("path");
 const express           = require("express");
-const fs                = require("node-fs");
-const morgan            = require("morgan");
+const fs                = require("fs-promise");
 const mkdirp            = require("mkdirp");
-const cors              = require("cors");
 const FileStreamRotator = require("file-stream-rotator");
-const bodyP             = require("body-parser");
 const semver            = require("semver");
+
+// Express JS Modules
+const cors              = require("cors");
+const morgan            = require("morgan");
+const bodyP             = require("body-parser");
+const normalize         = require("./lib/normalize.js");
 
 // Internal Modules.
 const stage     = require("./lib/stage.js");
@@ -43,182 +45,59 @@ const Routes    = require("./lib/express.js");
 const Update    = require("./lib/autoupdate.js");
 
 // config for now.
-let config;
-try {
-  config = require("./config/config.js");
-} catch(e) {
-  console.error("Failed to read config. This is OK on first run.")
-  config = require("./config/config.example.js");
+const config      = require("./config/config.js")
+
+// async wrapper
+const init = async () => {
+
+  const dashboard    = config.dashboard;
+  const logDirectory = config.nodemc.logDirectory;
+
+  // instance the server
+  let app = new express();
+  let server = new Server(config)
+  let updater = new Update();
+
+  // Check NodeMC version.
+  updater.checkVersion(config.nodemc.version.core);
+
+  // Extra fs call, but doesn't require logic.
+  mkdirp.sync(logDirectory);
+
+  let logFile   = path.join(logDirectory, "/access-%DATE%.log");
+  const logger  = FileStreamRotator.getStream({
+    filename: logFile,
+    frequency: "daily",
+    verbose: false,
+    date_format: "YYYY-MM-DD"
+  });
+
+  // static files
+  if(config.firstrun) {
+    app.use("/", express.static(dashboard.setup));
+  } else {
+    app.use("/", express.static(dashboard.dashboard));
+  }
+
+  // Check dashboard version
+  const data = await fs.readFile(path.join(dashboard.dashboard, "compat.txt"));
+  if(!semver.satisfies(config.nodemc.version.rest, data)) {
+    console.log("The installed dashboard does not appear to support this version of NodeMC!");
+    console.log("You may encounter issues with this dashboard - if so, please report this to the dashboard's developer.");
+  }
+
+  app.use(cors());
+  app.use(bodyP.json());
+  app.use(bodyP.urlencoded());
+  app.use(normalize);
+  app.use(morgan("common", {
+      stream: logger
+  }));
+
+  // Build the Express Routes.
+  let routes = new Routes(stage, app, server, config.nodemc.version.rest, require("debug")("nodemc:express"));
+
+  routes.start(config.nodemc.port);
 }
 
-let updater = new Update();
-updater.checkVersion(config.nodemc.version.core);
-
-// instance the server
-let app = new express();
-
-// Instance the Server Object
-let server = new Server(config)
-
-async.waterfall([
-  /**
-   * Stage 0 - Pre-Init
-   **/
-  (next) => {
-    let logger;
-    let logDirectory = config.nodemc.logDirectory;
-
-    stage.start(0, "preinit", "INIT");-
-
-    // Settup the logger
-    fs.exists(logDirectory, exists => {
-      if(!exists) {
-        mkdirp.sync(logDirectory);
-      }
-
-      let logFile = path.join(logDirectory + "/access-%DATE%.log");
-      logger  = FileStreamRotator.getStream({
-        filename: logFile,
-        frequency: "daily",
-        verbose: false,
-        date_format: "YYYY-MM-DD"
-      });
-
-      stage.finished(0, "preinit", "INIT");
-    });
-
-    stage.on("finished", data => {
-      if(data.stage === 0) {
-        return next(false, logger);
-      }
-    })
-  },
-
-  /**
-   * Stage 1 - Express Construction.
-   **/
-  (logger, next) => {
-    stage.start(1, "express::construct", "INIT");
-
-    // middleware
-    app.use(cors());
-
-    // static files
-    if(config.firstrun) {
-      app.use("/", express.static(config.dashboard.setup));
-    } else {
-      app.use("/", express.static(config.dashboard.dashboard));
-      fs.readFile(path.join(config.dashboard.dashboard, "compat.txt"), (err, data) => {
-        if (!semver.satisfies(config.nodemc.version.rest, data)) {
-          console.log("The installed dashboard does not appear to support this version of NodeMC!");
-          console.log("You may encounter issues with this dashboard - if so, please report this to the dashboard's developer.");
-        }
-      });
-    }
-
-    app.use(bodyP.json());
-    app.use(bodyP.urlencoded({
-        extended: false
-    }));
-    app.use(morgan("common", {
-        stream: logger
-    }));
-
-    app.use((req, res, next) => {
-      /**
-       * Send A API conforment response
-       *
-       * @param {Anything} data  - data to send.
-       *
-       * @returns {Res#Send} express res.send
-       **/
-      res.success = (data) => {
-        return res.send({
-          success: true,
-          data: data
-        });
-      }
-
-      /**
-       * Send A API conforment error.
-       *
-       * @param {String} message - error message
-       * @param {Anything} data  - data to send.
-       *
-       * @returns {Res#Send} express res.send
-       **/
-      res.error = (message, data) => {
-        return res.send({
-          success: false,
-          message: message,
-          data: data
-        })
-      }
-
-      return next();
-    })
-
-    // Build the Express Routes.
-    let routes = new Routes(stage, app, server, config.nodemc.version.rest, function() {
-      let args = Array.prototype.slice.call(arguments, 0);
-      args[0]  = "main: "+stage.Sub+ " stage "+ stage.Stage + ": " + args[0];
-      console.log.apply(console, args);
-    });
-
-    stage.on("finished", data => {
-      if(data.stage === 1) {
-        return next(false, routes);
-      }
-    })
-  },
-
-  /**
-   * Stage 2 - Express Launch
-   **/
-   (routes, next) => {
-     routes.start(config.nodemc.port);
-
-     stage.on("finished", data => {
-       if(data.stage === 2) {
-         return next();
-       }
-     })
-   }
-], err => {
-  if(err) {
-    console.log("Failed to Start! :(")
-    console.error(err);
-    process.exit(1);
-  }
-
-  if (config && !config.firstrun) {
-    let port   = config.minecraft.port,
-        apikey = config.nodemc.apikey;
-
-    // Start then restart server for things to take effect
-    console.log("Starting server...");
-
-    server.setport(port);
-    server.startServer();
-
-    console.log("Server running at localhost:" + port);
-    console.log("API Key: " + apikey);
-
-    return;
-  }
-  console.log("Navigate to http://localhost:" + config.nodemc.port + " to set up NodeMC.");
-});
-
-process.on("exit", () => {
-  try {
-    server.log.stream.close();
-    console.log("Closed minecraft.log stream.");
-    if(server.spawn) {
-      // In Theory this is already done.... child_process cannot exists when parent closes.
-      server.spawn.kill();
-    }
-  } catch(e) {
-    console.error(e)
-    console.error("Failed to close the Minecraft server log stream.")
-  }
-})
+init();
