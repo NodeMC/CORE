@@ -1,9 +1,9 @@
 <p align="center"><img src="https://avatars0.githubusercontent.com/u/17482389?v=3&s=150" /></p>
 
 <p align="center">
-  <a href="http://nodemc.space:8080/job/NodeMC/"><img src="http://ci.nodemc.space/buildStatus/icon?job=NodeMC" alt="Build Status" /></a>
+  <a href="http://nodemc.space:8080/job/NodeMC/"><img src="https://img.shields.io/badge/build-broken-red.sv" alt="Build Status" /></a>
   <a href="https://nodemc.space/slack"><img src="https://img.shields.io/badge/slack-community-brightgreen.svg" alt="Slack" /></a>
-  <img src="https://img.shields.io/badge/license-GPL3-brightgrreen.svg" alt="License" />
+  <img src="https://img.shields.io/badge/license-GPL3-brightgreen.svg" alt="License" />
 </p>
 
 <p align="center">NodeMC is a Minecraft hosting solution, and API provider, written in Node.js and powered by open-source software</p>
