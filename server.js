@@ -45,7 +45,7 @@ const Update    = require("./lib/autoupdate.js");
 // config for now.
 let config;
 try {
-  config = require("./config/config.json");
+  config = require("./config/config.js");
 } catch(e) {
   console.error("Failed to read config. This is OK on first run.")
   config = require("./config/config.example.js");
