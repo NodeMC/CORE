@@ -6,6 +6,7 @@
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "body-parser": "^1.14.2",
+    "colors": "^1.1.2",
     "cors": "^2.7.1",
     "debug": "^2.6.3",
     "dir": "^0.1.2",
@@ -29,7 +30,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "snyk test && node_modules/.bin/mocha test/001_env.js test/002_eslint.js test/v1/*.js"
+    "test": "node_modules/.bin/snyk test && node_modules/.bin/mocha test/001_env.js test/002_eslint.js test/v1/*.js"
   },
   "repository": {
     "type": "git",

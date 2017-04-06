@@ -24,6 +24,9 @@
 
 "use strict";
 
+// string hijack
+require("colors")
+
 // Requires
 const path              = require("path");
 const express           = require("express");
@@ -39,13 +42,16 @@ const bodyP             = require("body-parser");
 const normalize         = require("./lib/normalize.js");
 
 // Internal Modules.
-const stage     = require("./lib/stage.js");
 const Server    = require("./lib/wrapper/server.js");
 const Routes    = require("./lib/express.js");
 const Update    = require("./lib/autoupdate.js");
 
 // config for now.
 const config      = require("./config/config.js")
+
+console.log("By default NodeMC doesn\'t output to console.")
+console.log("You can view it\'s inner debugging, with DEBUG='nodemc:<component>'")
+console.log("or enable all debug output with DEBUG='nodemc:*'\n")
 
 // async wrapper
 const init = async () => {
@@ -82,8 +88,8 @@ const init = async () => {
   // Check dashboard version
   const data = await fs.readFile(path.join(dashboard.dashboard, "compat.txt"));
   if(!semver.satisfies(config.nodemc.version.rest, data)) {
-    console.log("The installed dashboard does not appear to support this version of NodeMC!");
-    console.log("You may encounter issues with this dashboard - if so, please report this to the dashboard's developer.");
+    console.error("The installed dashboard does not appear to support this version of NodeMC!".red);
+    console.error("You may encounter issues with this dashboard - if so, please report this to the dashboard's developer.".red);
   }
 
   app.use(cors());
@@ -97,8 +103,9 @@ const init = async () => {
   }));
 
   // Build the Express Routes.
-  let routes = new Routes(stage, app, server, config.nodemc.version.rest, require("debug")("nodemc:express"));
+  let routes = new Routes(app, server, config.nodemc.version.rest, require("debug")("nodemc:express"));
 
+  console.log(`NodeMC started on :${config.nodemc.port}`)
   routes.start(config.nodemc.port);
 }
 
