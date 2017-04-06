@@ -38,7 +38,7 @@ const semver            = require("semver");
 
 // Internal Modules.
 const stage     = require("./lib/stage.js");
-const Server    = require("./lib/server.js");
+const Server    = require("./lib/wrapper/server.js");
 const Routes    = require("./lib/express.js");
 const Update    = require("./lib/autoupdate.js");
 
@@ -48,15 +48,15 @@ try {
   config = require("./config/config.json");
 } catch(e) {
   console.error("Failed to read config. This is OK on first run.")
-  config = require("./config/config.example.json");
+  config = require("./config/config.example.js");
 }
 
 let updater = new Update();
 
-updater.checkVersion(config.nodemc.version.core, function(isupdate){
-  if(isupdate){
-    updater.updateGit(function(success){});
-  }
+updater.checkVersion(config.nodemc.version.core, isupdate => {
+  if(!isupdate) return false;
+
+  updater.updateGit(function(success){});
 });
 
 // instance the server

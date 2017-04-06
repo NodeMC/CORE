@@ -7,14 +7,9 @@
 
 "use strict";
 
-const authCheck = require("../../lib/auth.js"),
-      path      = require("path"),
-      fs        = require("fs"),
-      io        = require("socket.io").listen(server.config.nodemc.port,  { path: '/v1/poll' });
-
-io.on('connection', function(){
-  console.alert("Connected");
-});
+const authCheck = require("../../lib/auth.js")
+const path      = require("path")
+const fs        = require("fs")
 
 module.exports = (Router, server) => {
   Router.use(authCheck(server));
