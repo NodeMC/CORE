@@ -11,9 +11,9 @@
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "external-ip": "^0.2.4",
-    "file-stream-rotator": "0.0.6",
+    "file-stream-rotator": "0.0.7",
     "mkdirp": "^0.5.1",
-    "mocha": "^2.4.5",
+    "mocha": "3.0.0",
     "morgan": "^1.6.1",
     "node-fs": "^0.1.7",
     "node-ipc": "^8.1.0",
@@ -28,11 +28,12 @@
     "mocha-eslint": "^2.0.2",
     "nexe": "^1.1.0",
     "should": "^8.3.1",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "snyk": "^1.27.1"
   },
   "scripts": {
     "start": "node server.js",
-    "test": "node_modules/.bin/mocha test/001_env.js test/002_eslint.js test/v1/*.js"
+    "test": "snyk test && node_modules/.bin/mocha test/001_env.js test/002_eslint.js test/v1/*.js"
   },
   "repository": {
     "type": "git",
