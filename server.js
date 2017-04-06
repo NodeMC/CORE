@@ -88,7 +88,9 @@ const init = async () => {
 
   app.use(cors());
   app.use(bodyP.json());
-  app.use(bodyP.urlencoded());
+  app.use(bodyP.urlencoded({
+    extended: false
+  }));
   app.use(normalize);
   app.use(morgan("common", {
       stream: logger
