@@ -19,7 +19,8 @@
     "node-ipc": "^8.1.0",
     "properties-reader": "0.0.13",
     "request-promise-native": "^1.0.3",
-    "semver": "^5.1.0"
+    "semver": "^5.1.0",
+    "vm2": "^3.4.6"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
