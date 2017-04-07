@@ -5,6 +5,9 @@
     "node": true,
     "es6": true
   },
+  "globals": {
+    "nmc": false
+  },
   "rules": {
     /* Possible Errors */
     "no-extra-parens": 2,
