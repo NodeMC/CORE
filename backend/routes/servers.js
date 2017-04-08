@@ -17,6 +17,18 @@ module.exports = (baseRouter, server) => {
 
   baseRouter.use(authCheck(server));
   baseRouter.use("/0", Router);
+
+  /**
+   * GET /
+   *
+   * List available servers (currently only one)
+   */  
+  baseRouter.get("/", (req, res) => {
+    return res.success([{
+      name: "default"
+    }]);
+  });
+
   /**
    * POST /0/restart
    *
