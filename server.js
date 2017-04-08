@@ -42,9 +42,12 @@ const bodyP             = require("body-parser");
 const normalize         = require("./lib/normalize.js");
 
 // Internal Modules.
-const Server    = require("./lib/wrapper/server.js");
-const Routes    = require("./lib/express.js");
-const Update    = require("./lib/autoupdate.js");
+const Server            = require("./lib/wrapper/server.js");
+const Routes            = require("./lib/express.js");
+const Update            = require("./lib/autoupdate.js");
+const PluginLoader      = require("./lib/plugin/loader.js");
+const PluginAPI         = require("./lib/plugin/api.js");
+const Logger            = require("./lib/logger.js");
 
 // config for now.
 const config      = require("./config/config.js")
@@ -107,6 +110,11 @@ const init = async () => {
 
   console.log(`NodeMC started on :${config.nodemc.port}`)
   routes.start(config.nodemc.port);
+
+  // Initialise plugin system
+  let pLogger = new Logger("plugins"),
+    pAPI = new PluginAPI.PluginAPI(pLogger),
+    pLoader = new PluginLoader(pLogger, pAPI);
 }
 
 init();
