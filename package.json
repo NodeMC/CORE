@@ -31,7 +31,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "node_modules/.bin/snyk test && node_modules/.bin/mocha test/001_env.js test/002_eslint.js test/v1/*.js"
+    "test": "node_modules/.bin/snyk test && node_modules/.bin/mocha test/001_env.js test/002_eslint.js test/v2/*.js"
   },
   "repository": {
     "type": "git",
