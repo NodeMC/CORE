@@ -1,5 +1,5 @@
 /**
- * /server
+ * /servers
  *
  * @author Jared Allard <jaredallard@outlook.com>
  * @license MIT
@@ -7,15 +7,30 @@
 
 "use strict";
 
-const authCheck = require("../../lib/auth.js")
-const path      = require("path")
-const fs        = require("fs")
+const authCheck = require("../../lib/auth.js");
+const express = require("express");
+const path = require("path");
+const fs = require("fs");
 
-module.exports = (Router, server) => {
-  Router.use(authCheck(server));
+module.exports = (baseRouter, server) => {
+  let Router = express.Router();
+
+  baseRouter.use(authCheck(server));
+  baseRouter.use("/0", Router);
 
   /**
-   * POST /restart
+   * GET /
+   *
+   * List available servers (currently only one)
+   */  
+  baseRouter.get("/", (req, res) => {
+    return res.success([{
+      name: "default"
+    }]);
+  });
+
+  /**
+   * POST /0/restart
    *
    * Restart the server.
    **/
@@ -26,7 +41,7 @@ module.exports = (Router, server) => {
   });
 
   /**
-   * POST /start
+   * POST /0/start
    *
    * Start the server.
    **/
@@ -42,7 +57,7 @@ module.exports = (Router, server) => {
   });
 
   /**
-   * POST /stop
+   * POST /0/stop
    *
    * Stop the server.
    **/
@@ -57,7 +72,7 @@ module.exports = (Router, server) => {
   });
 
   /**
-   * GET /status
+   * GET /0/status
    *
    * Get the status of the server
    **/
@@ -72,7 +87,7 @@ module.exports = (Router, server) => {
   });
 
   /**
-   * POST /execute
+   * POST /0/execute
    *
    * Execute a command on the server.
    **/
@@ -91,7 +106,7 @@ module.exports = (Router, server) => {
   });
 
   /**
-   * GET /log
+   * GET /0/log
    *
    * Get the server's log.
    **/
@@ -109,7 +124,7 @@ module.exports = (Router, server) => {
   });
 
   /**
-   * GET /info
+   * GET /0/info
    *
    * Get server info.
    **/
@@ -136,5 +151,5 @@ module.exports = (Router, server) => {
     res.success(info);
   });
 
-  return Router;
+  return baseRouter;
 }
