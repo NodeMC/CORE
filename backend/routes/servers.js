@@ -1,5 +1,5 @@
 /**
- * /server
+ * /servers
  *
  * @author Jared Allard <jaredallard@outlook.com>
  * @license MIT
@@ -7,11 +7,14 @@
 
 "use strict";
 
-const authCheck = require("../../lib/auth.js")
-const path      = require("path")
-const fs        = require("fs")
+const authCheck = require("../../lib/auth.js");
+const express = require("express");
+const path = require("path");
+const fs = require("fs");
 
-module.exports = (Router, server) => {
+module.exports = (router, server) => {
+  let Router = express.Router();
+  router.use("/0", Router);
   Router.use(authCheck(server));
 
   /**
@@ -136,5 +139,5 @@ module.exports = (Router, server) => {
     res.success(info);
   });
 
-  return Router;
+  return router;
 }
