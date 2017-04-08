@@ -12,13 +12,13 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 
-module.exports = (router, server) => {
+module.exports = (baseRouter, server) => {
   let Router = express.Router();
-  router.use("/0", Router);
-  Router.use(authCheck(server));
 
+  baseRouter.use(authCheck(server));
+  baseRouter.use("/0", Router);
   /**
-   * POST /restart
+   * POST /0/restart
    *
    * Restart the server.
    **/
@@ -29,7 +29,7 @@ module.exports = (router, server) => {
   });
 
   /**
-   * POST /start
+   * POST /0/start
    *
    * Start the server.
    **/
@@ -45,7 +45,7 @@ module.exports = (router, server) => {
   });
 
   /**
-   * POST /stop
+   * POST /0/stop
    *
    * Stop the server.
    **/
@@ -60,7 +60,7 @@ module.exports = (router, server) => {
   });
 
   /**
-   * GET /status
+   * GET /0/status
    *
    * Get the status of the server
    **/
@@ -75,7 +75,7 @@ module.exports = (router, server) => {
   });
 
   /**
-   * POST /execute
+   * POST /0/execute
    *
    * Execute a command on the server.
    **/
@@ -94,7 +94,7 @@ module.exports = (router, server) => {
   });
 
   /**
-   * GET /log
+   * GET /0/log
    *
    * Get the server's log.
    **/
@@ -112,7 +112,7 @@ module.exports = (router, server) => {
   });
 
   /**
-   * GET /info
+   * GET /0/info
    *
    * Get server info.
    **/
@@ -139,5 +139,5 @@ module.exports = (router, server) => {
     res.success(info);
   });
 
-  return router;
+  return baseRouter;
 }
