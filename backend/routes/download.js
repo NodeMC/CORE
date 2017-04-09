@@ -27,8 +27,7 @@ module.exports = (Router, server) => {
    **/
   Router.get("/:file", (req, res) => {
       const item = querystring.unescape(req.params.file);
-
-      let file = path.join(minecraftDir, item);
+      const file = path.join(minecraftDir, item);
 
       // Check if it exists or is a directory.
       try {
