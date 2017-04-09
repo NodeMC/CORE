@@ -7,9 +7,9 @@
 
 "use strict";
 
-const path        = require("path"),
-      querystring = require("querystring"),
-      fs          = require("fs-promise");
+const path        = require("path")
+const querystring = require("querystring")
+const fs          = require("fs-promise")
 
 module.exports = (Router, server) => {
   const minecraftDir = server.config.minecraft.dir
