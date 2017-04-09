@@ -7,8 +7,6 @@
 
 "use strict";
 
-const authCheck = require("../../lib/auth.js");
-
 module.exports = (Router, server) => {
 
   /**

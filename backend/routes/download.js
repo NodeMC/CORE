@@ -9,9 +9,16 @@
 
 const path        = require("path"),
       querystring = require("querystring"),
-      fs          = require("fs");
+      fs          = require("fs-promise");
 
 module.exports = (Router, server) => {
+  const minecraftDir = server.config.minecraft.dir
+
+  Router.use((req, res) => {
+    res.error("disabled", {
+      debuginfo: "Endpoint is INSECURE"
+    })
+  });
 
   /**
    * GET /:file
@@ -19,16 +26,18 @@ module.exports = (Router, server) => {
    * Download a file.
    **/
   Router.get("/:file", (req, res) => {
-      let item = querystring.unescape(req.params.file),
-          dir  = server.config.minecraft.dir;
+      const item = querystring.unescape(req.params.file);
 
-      let file = path.join(dir, item);
+      let file = path.join(minecraftDir, item);
 
-      if (!fs.lstatSync(file).isDirectory()) {
-        return res.sendFile(file);
+      // Check if it exists or is a directory.
+      try {
+        if(fs.lstatSync(file).isDirectory()) return res.error("not_a_file")
+      } catch(e) {
+        return res.error("file_not_found")
       }
 
-      return res.error("file_not_found");
+      return res.sendFile(file);
   });
 
   return Router;

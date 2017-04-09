@@ -18,7 +18,7 @@ module.exports = (Router, server) => {
       debuginfo: "Endpoint is INSECURE"
     })
   });
-  
+
   Router.use(authCheck(server));
 
   const minecraftDir = server.config.minecraft.dir
