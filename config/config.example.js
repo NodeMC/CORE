@@ -9,7 +9,8 @@ module.exports = {
       "wrapper": "1.0.0"
       },
     "port": 3000,
-    "logDirectory": "./logs"
+    "logDirectory": "./logs",
+    "manager": "nodemc"
   },
   "dashboard": {
     "setup": "./frontend/setup",
