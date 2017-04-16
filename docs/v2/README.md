@@ -2,7 +2,7 @@
 
 **v2**
 
-Written & maintained by [Jared Allard &lt;jared@staymarta.com&gt;](mailto:jaredallard@outlook.com)
+Written & maintained by [Jared Allard &lt;jaredallard@outlook.com&gt;](mailto:jaredallard@outlook.com)
 
 **NOTICE: THIS SECTION DEFINES ALL TERMINOLOGY AND DEFINES WHAT THINGS ARE. READ THIS**
 
