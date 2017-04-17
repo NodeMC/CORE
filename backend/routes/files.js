@@ -1,7 +1,7 @@
 /**
  * /files
  *
- * @todo Fix this broken PoS
+ * @todo IMPLEMENT v2 API
  * @author Jared Allard <jaredallard@outlook.com>
  * @license GPL3
  **/
@@ -107,7 +107,7 @@ module.exports = (Router, server) => {
    *
    * Delete a file.
    **/
-  Router.delete("/delete", (req, res) => {
+  Router.delete("/", (req, res) => {
     let item = req.body.file;
     let dir  = server.config.minecraft.dir;
 
