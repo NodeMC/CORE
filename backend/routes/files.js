@@ -1,23 +1,31 @@
 /**
  * /files
  *
+ * @todo IMPLEMENT v2 API
  * @author Jared Allard <jaredallard@outlook.com>
  * @license GPL3
  **/
 
 "use strict";
 
-const authCheck = require("../../lib/auth.js"),
-      fs        = require("fs"),
-      path      = require("path");
+const authCheck = require("../../lib/auth.js")
+const fs        = require("fs-promise")
+const path      = require("path")
 
 module.exports = (Router, server) => {
+  Router.use((req, res) => {
+    res.error("disabled", {
+      debuginfo: "Endpoint is INSECURE"
+    })
+  });
+
   Router.use(authCheck(server));
 
-  Router.get("/", (req, res) => { // Get server file
-    let dir = server.config.minecraft.dir;
+  const minecraftDir = server.config.minecraft.dir
 
-    fs.readdir(dir, (err, items) => {
+  Router.get("/", (req, res) => { // Get server file
+
+    fs.readdir(minecraftDir, (err, items) => {
       if(err) {
         return res.error("internal", {
           debuginfo: err
@@ -99,7 +107,7 @@ module.exports = (Router, server) => {
    *
    * Delete a file.
    **/
-  Router.delete("/delete", (req, res) => {
+  Router.delete("/", (req, res) => {
     let item = req.body.file;
     let dir  = server.config.minecraft.dir;
 
