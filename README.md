@@ -31,11 +31,13 @@
 Running NodeMC is easy.
 
 ```bash
-git clone https://github.com/NodeMC/CORE.git NodeMC/
+git clone https://github.com/NodeMC/CORE.git NodeMC
 
-cd NodeMC/
+cd NodeMC
 
 npm install # yarn install
+
+cp config/config.example.js config/config.js
 
 node server.js
 ```
