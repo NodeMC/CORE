@@ -2,24 +2,6 @@
 
 [![Build Status](http://ci.nodemc.space/buildStatus/icon?job=NodeMC)](http://nodemc.space:8080/job/NodeMC/) [![Gitter](https://img.shields.io/badge/slack-community-brightgreen.svg)](https://nodemc.space/slack/)
 
-## About
-
-[Official Documentation](https://nodemc.space/docs)
-
-[Official Website](https://nodemc.space)
-
-[My Patreon](https://www.patreon.com/gmemstr?ty=h)
-
-NodeMC CORE is the core application for NodeMC. It is an API wrapper
-for Minecraft servers that developers can use to build dashboards 
-and apps around using whatever frameworks and languages they choose. 
-
-It is written in Node.js for utmost speed and reliability, as well
-as the wealth of npm packages that are used to expand the functionality
-well beyond traditional dashboards abilities.
-
-## Requirements
-
 - [Node.js](https://nodejs.org/en/) >= 5.7.0
 
 - [npm](https://www.npmjs.com/) >= 3.6.0
@@ -32,10 +14,10 @@ well beyond traditional dashboards abilities.
     - Linux / Mac / BSD / Windows
     - Python 2.6 or 2.7 (use --python if not in PATH)
     - Windows: Visual Studio 2010+
-    
+
 ## Running
 
-Running NodeMC is easy. 
+Running NodeMC is easy.
 
 ```
 git clone https://github.com/NodeMC/CORE.git NodeMC/
@@ -78,7 +60,7 @@ Lastly, please try to use a node.js org commit style; `component: changes`. i.e 
 
 TL;DR - If you modify NodeMC, you need to mark your code and/or binary as such.
 
-> For the developers' and authors' protection, the GPL clearly explains 
+> For the developers' and authors' protection, the GPL clearly explains
 that there is no warranty for this free software.  For both users' and
 authors' sake, the GPL requires that modified versions be marked as
 changed, so that their problems will not be attributed erroneously to
@@ -94,3 +76,8 @@ Various OSS modules are used in this project, please check `package.json` for th
 ## License
 
 GNU GPL3
+=======
+	Gabriel Simmer
+
+[Matthew on Twitter](https://twitter.com/md678685) [Jared on Twitter](https://twitter.com/jaredallard)
+>>>>>>> master
