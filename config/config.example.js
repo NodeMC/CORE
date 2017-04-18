@@ -16,5 +16,8 @@ module.exports = {
     "setup": "./frontend/setup",
     "dashboard": "./frontend/dashboard"
   },
+  "minecraft": {
+    "dir": "./minecraft" // relative to NodeMC base directory.
+  },
   "firstrun": true
 }
