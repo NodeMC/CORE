@@ -1,34 +1,83 @@
-# NodeMC Core
+# CORE
 
-## Update as of October 18, 2016
+[![Build Status](http://ci.nodemc.space/buildStatus/icon?job=NodeMC)](http://nodemc.space:8080/job/NodeMC/) [![Gitter](https://img.shields.io/badge/slack-community-brightgreen.svg)](https://nodemc.space/slack/)
 
-I'm really sorry guys. But I have to do this. NodeMC isn't really being
-maintained any more.
+- [Node.js](https://nodejs.org/en/) >= 5.7.0
 
-The reasons are twofold. For one, I've lost much of my interest in persuing
-v6. It was fun, but I struggled to learn ES6, which Jared rewrote all of NodeMC
-in for v6. Absolutely nothing against him, he's a great guy doing good work but 
-unfortunately that rewrite sort of killed my interest. 
+- [npm](https://www.npmjs.com/) >= 3.6.0
 
-Also, Jared, Matthew and I have all been busy with either school or other projects.
-Unfortunately, this means that we haven't had time to devote to NodeMC. I suppose
-that's just how it goes for projects like this sometimes.
+- [Java JRE](https://www.java.com/en/) >= 1.7.0
 
-So - if you want to take over NodeMC, please do. It was a great project that I loved
-seeing progress. It's unfortunate that we've not been able to maintain it or get
-v6 out the door. 
+### (Optional) Building Requirements
 
-All you have to do is either [tweet me](https://twitter.com/gmem_) or open a new pull request
-with whatever you wanted to add. I'll still answer issues and moderate pull request, but I
-personally will not be contributing much if any code.
+- [nexe](https://jaredallard.me/nexe/) >= 1.1.0
+    - Linux / Mac / BSD / Windows
+    - Python 2.6 or 2.7 (use --python if not in PATH)
+    - Windows: Visual Studio 2010+
 
-**If you're looking for v5 (stable), it's at the [v5-dep](https://github.com/NodeMC/CORE/tree/v5-dep/)
-branch**. This is so I can still keep that code but also make sure you can see this message.
+## Running
 
-Really sorry once again, but I hope you guys understand.
+Running NodeMC is easy.
 
-Cheers,
+```
+git clone https://github.com/NodeMC/CORE.git NodeMC/
 
+cd NodeMC/
+
+npm install
+
+node server.js
+```
+
+Then navigate to http://localhost:3000 and go through the setup processs.
+
+## Contributing
+
+### Wall of Fame
+
+[Mathew Da Costa](https://github.com/md678685) for his incredible work on the plugin system
+and for his continued support of NodeMC. :thumbsup:
+
+[Jared Allard](https://github.com/jaredallard) for his immense contributions of rewriting NodeMC
+using ES6 sepcifications. :heart:
+
+I welcome contributions from other developers, however there are a few
+things you should keep in mind when making a pull request.
+
+First things first, pull requests will never be accepted to the master branch
+unless there is an important security or performance patch. Otherwise, they will be
+merged to whichever is the newest upcoming version of NodeMC (v7).
+
+Second, if you are considering a major rewrite of a particular component of NodeMC,
+be sure to run it by me in the Gitter (@gmemstr) so I can be aware of your proposed changes.
+
+Third, please make sure you follow the `.eslintrc` so that your code style is the same. Pull requests that do *not* pass
+the test to check this will *NOT* be accepted.
+
+Lastly, please try to use a node.js org commit style; `component: changes`. i.e `readme: update with new rules`.
+
+## Building
+
+TL;DR - If you modify NodeMC, you need to mark your code and/or binary as such.
+
+> For the developers' and authors' protection, the GPL clearly explains
+that there is no warranty for this free software.  For both users' and
+authors' sake, the GPL requires that modified versions be marked as
+changed, so that their problems will not be attributed erroneously to
+authors of previous versions.
+
+I use [nexe](https://github.com/jaredallard/nexe) for the builds of NodeMC. I recommend it - version 2.0.0
+should be available around the time of this branch being merged upstream.
+
+## Credits
+
+Various OSS modules are used in this project, please check `package.json` for the extended list of them.
+
+## License
+
+GNU GPL3
+=======
 	Gabriel Simmer
-	
+
 [Matthew on Twitter](https://twitter.com/md678685) [Jared on Twitter](https://twitter.com/jaredallard)
+>>>>>>> master

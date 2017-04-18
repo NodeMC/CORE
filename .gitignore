@@ -1,0 +1,10 @@
+tmp/
+config/config.json
+config/config.production.json
+node_modules/
+build/
+nmc_logs/
+logs/
+desktop.ini
+minecraft/
+jsconfig.json
