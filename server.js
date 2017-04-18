@@ -34,6 +34,7 @@ const fs                = require("fs-promise");
 const mkdirp            = require("mkdirp");
 const FileStreamRotator = require("file-stream-rotator");
 const semver            = require("semver");
+const debug             = require("debug")("nodemc:server")
 
 // Express JS Modules
 const cors              = require("cors");
@@ -61,6 +62,18 @@ const init = async () => {
 
   const dashboard    = config.dashboard;
   const logDirectory = config.nodemc.logDirectory;
+
+  debug("config-patch", "fixing relative dirs")
+
+  // Fix relative directories.
+  const mDir = config.minecraft.dir;
+  if(!path.isAbsolute(mDir)) {
+    const relPath = path.join(__dirname, mDir);
+    debug("config-patch", "evaluated path to be", relPath)
+    config.minecraft.dir = relPath;
+
+    mkdirp.sync(relPath);
+  }
 
   // instance the server
   let app = new express();
