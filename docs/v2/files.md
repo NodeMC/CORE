@@ -6,8 +6,6 @@ Download / Manage files on the Minecraft server.
 
 ## GET /:path
 
-![status:not-implemented](https://img.shields.io/badge/status-not--implemented-red.svg?style=flat-square)
-
 Get the contents of `:path` if it's a file, or return an array of it's contents
 if it's a directory.
 
