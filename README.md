@@ -30,7 +30,15 @@ node server.js
 ```
 
 Then navigate to http://localhost:3000 and go through the setup processs.
+npm >= 3.6.0
 
+Java JRE >= 1.7.0
+
+(Optional) Building Requirementsnpm >= 3.6.0
+
+Java JRE >= 1.7.0
+
+(Optional) Building Requirements
 ## Contributing
 
 ### Wall of Fame
@@ -76,8 +84,3 @@ Various OSS modules are used in this project, please check `package.json` for th
 ## License
 
 GNU GPL3
-=======
-	Gabriel Simmer
-
-[Matthew on Twitter](https://twitter.com/md678685) [Jared on Twitter](https://twitter.com/jaredallard)
->>>>>>> master
