@@ -13,8 +13,8 @@ let srv;
 const port   = config.nodemc.port;
 const apikey = config.nodemc.apikey;
 
-describe("/v1/auth", () => {
-  let url = "http://127.0.0.1:"+port+"/v1/auth";
+describe("/v2/auth", () => {
+  let url = "http://127.0.0.1:"+port+"/v2/auth";
 
   beforeEach((next) => {
     let deffer = (cb) => {

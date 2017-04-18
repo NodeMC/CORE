@@ -18,8 +18,8 @@ let srv;
 const port   = config.nodemc.port;
 const apikey = config.nodemc.apikey;
 
-describe("/v1/server", () => {
-  let url = "http://127.0.0.1:"+port+"/v1/server";
+describe("/v2/servers/server", () => {
+  let url = "http://127.0.0.1:"+port+"/v2/servers/0";
 
   beforeEach((next) => {
     let deffer = (cb) => {
