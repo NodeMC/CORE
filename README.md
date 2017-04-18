@@ -25,6 +25,7 @@
 
 - [Java JRE](https://www.java.com/en/) >= 1.7.0
 
+
 ## Running
 
 Running NodeMC is easy.
@@ -39,7 +40,7 @@ npm install # yarn install
 node server.js
 ```
 
-Then navigate to http://localhost:3000 and go through the setup process.
+Then navigate to `http://localhost:3000` and go through the setup process.
 
 ## Contributing
 
