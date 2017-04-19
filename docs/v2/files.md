@@ -13,7 +13,12 @@ Directory response:
 
 ```js
 [
-  'files'
+	{
+		"type": "file",
+		"name": "file.txt",
+		"size": 0,
+		"created": "2017-04-19T18:04:07.062Z"
+	}
 ]
 ```
 
@@ -41,12 +46,4 @@ of the minecraft dir.
 
 Delete file or directory at `:path`.
 
-
-```js
-{
-  "deleted": [
-    'fileinadir'
-  ],
-  "file": "some_directory"
-}
-```
+Returns `data: ""` on success, or error otherwise.

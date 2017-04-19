@@ -12,6 +12,7 @@
     "dir": "^0.1.2",
     "express": "^4.13.3",
     "file-stream-rotator": "^0.1.0",
+    "fs-extra": "^2.1.2",
     "fs-promise": "^2.0.2",
     "mkdirp": "^0.5.1",
     "mocha": "^3.2.0",
