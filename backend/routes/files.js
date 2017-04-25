@@ -17,15 +17,30 @@ const rm        = require("fs-extra").remove
 
 let minecraftDir;
 
+/**
+ * Serialize a path.
+ * @param  {String} string String to serialize.
+ * @return {String}        Safe string.
+ */
 const serializePath = string => {
   return string.replace(/[^\w]\.{2,}(?!\w)/g, "")
 }
 
+/**
+ * Wrapper around Express.
+ * @param  {String} url  URL, plus Path to extract.
+ * @return {String}      Safe, Standarized Path.
+ */
 const standardizePath = url => {
   const path = getPath(url);
   return nodePath.join(minecraftDir, serializePath(path));
 }
 
+/**
+ * Parse a URL to get everything but, i.e /v1/files
+ * @param  {String} url URL to parse.
+ * @return {String}     Parsed String.
+ */
 const getPath = url => {
   return url.replace(/^\/[^\/]+\/[^\/]+\//g, "")
 }
