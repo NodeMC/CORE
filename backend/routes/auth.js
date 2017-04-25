@@ -22,9 +22,7 @@ module.exports = (Router, server) => {
       return res.success(true);
     }
 
-    return res.error("invalid_authentication", {
-      moreinfo: "API Key is NOT valid."
-    });
+    return res.error("invalid_authentication", "Invalid API Key");
   });
 
   return Router;
