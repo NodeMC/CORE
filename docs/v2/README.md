@@ -8,14 +8,9 @@ Written & maintained by [Jared Allard &lt;jaredallard@outlook.com&gt;](mailto:ja
 
 ## Authentication
 
-![status:not-implemented](https://img.shields.io/badge/status-not--implemented-red.svg?style=flat-square)
-
 * API Keys
 
 ## Standard Format
-
-![status:not-implemented](https://img.shields.io/badge/status-not--implemented-red.svg?style=flat-square)
-
 
 ### Basic metadata
 
@@ -36,9 +31,13 @@ This is available when an error has occurred.
 
 ```js
 {
-  "error": {
-    "message": "Helpful User Friendly Error Message",
-    "code":    "ERRCODE"
-  }
+  "errors": [
+    {
+      "message": "err_type_or_whatever", // Always default to this.
+      "friendly": "Human friendly error message representation", // Optional.
+      "code":    "HTTP Error Code"
+    }
+    // Always parse as many as possible, in the future multiple errors may be given.
+  ]
 }
 ```
