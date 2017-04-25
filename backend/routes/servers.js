@@ -9,7 +9,6 @@
 
 const authCheck = require("../../lib/auth.js");
 const express = require("express");
-const path = require("path");
 const fs = require("fs");
 
 module.exports = (baseRouter, server) => {
@@ -22,7 +21,7 @@ module.exports = (baseRouter, server) => {
    * GET /
    *
    * List available servers (currently only one)
-   */  
+   */
   baseRouter.get("/", (req, res) => {
     return res.success([{
       name: "default"
