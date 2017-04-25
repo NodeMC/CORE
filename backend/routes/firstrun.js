@@ -7,25 +7,29 @@
 
 "use strict";
 
-const serverjar = require("../../lib/wrapper/serverjar.js"),
-      mkdirp    = require("mkdirp"),
-      async     = require("async"),
-      fs        = require("fs");
+const serverjar = require("../../lib/wrapper/serverjar.js")
+const uuid      = require("uuid")
+const mkdirp    = require("mkdirp")
+const async     = require("async")
+const fs        = require("fs")
+
+// string coloration.
+require("colors")
 
 module.exports = (Router, server) => {
   let config = server.config;
 
+  // Check if firstrun or not.
+  Router.use((req, res, next) => {
+    const firstrun = config.firstrun;
+
+    if(firstrun) return next();
+
+    return res.error("is_not_first_run", "The server has been run before!");
+  })
+
   // First run setup POST
-  Router.post("/setup", function(req, res) {
-    let apikey   = config.nodemc.apikey,
-        firstrun = config.firstrun;
-
-    if(!firstrun) {
-      return res.error("is_not_first_run", {
-        moreinfo: "The server has been run before!"
-      });
-    }
-
+  Router.post("/setup", (req, res) => {
     let details;
     async.waterfall([
       /**
@@ -37,12 +41,13 @@ module.exports = (Router, server) => {
             name: null,
             port: parseInt(req.body.mc_port, 10),
             ram: parseInt(req.body.memory, 10) + "M",
-            dir: req.body.directory + "/",
+            dir: `${req.body.directory}/`,
             jar: req.body.flavour || "vanilla",
             version: req.body.version || "latest"
           },
           nodemc: {
-            apikey: apikey,
+            apikey: req.body.apikey,
+            version: config.nodemc.version,
             port: parseInt(req.body.nmc_port, 10),
             logDirectory: "./nodemc/logs"
           },
@@ -70,33 +75,29 @@ module.exports = (Router, server) => {
        * Fetch the jar.
        **/
       (next) => {
-        let dir = details.minecraft.dir,
-            jar = details.minecraft.jar,
-            ver = details.minecraft.version;
+        const dir = details.minecraft.dir,
+              jar = details.minecraft.jar,
+              ver = details.minecraft.version;
 
-        serverjar(jar, ver, dir, (msg) => {
-          if (msg == "invalid_jar") {
-            return next("Failed to obtain jar file.");
-          }
-
-          details.minecraft.jarfile = jar + "." + ver + ".jar";
-
-          return next();
-        });
+        // Download a server jar.
+        serverjar(jar, ver, dir)
+          .then(() => {
+            details.minecraft.jarfile = jar + "." + ver + ".jar";
+            return next();
+          })
+          .catch(err => {
+            return next(err);
+          })
       },
 
       /**
        * Save the Configuration
        **/
       (next) => {
-        details = `module.exports = ${JSON.stringify(details, null, 1)}`;
-        fs.writeFile("./config/config.js", details, function(err) {
-          if (err) {
-            return next(err);
-          }
+        const stringified = JSON.stringify(details, null, 2);
+        details = `module.exports = ${stringified}`;
 
-          return next();
-        });
+        fs.writeFile("./config/config.js", details, next);
       }
     ], err => {
       if(err) {
@@ -106,23 +107,21 @@ module.exports = (Router, server) => {
         });
       }
 
-      console.log("New admin settings saved.");
-      console.log("You can use CTRL+C to stop the server.");
+      console.log("New admin settings saved.".green);
+      console.log("You can use CTRL+C to stop the server.".cyan);
       return res.send({});
     });
   });
 
-  Router.get("/apikey", function(req, res) {
-    let apikey   = config.nodemc.apikey,
-        firstrun = config.firstrun;
+  Router.get("/apikey", (req, res) => {
+    let apikey     = config.nodemc.apikey
 
-    if (firstrun) {
-      return res.send(apikey);
+    // Generate an APIKey
+    if(!apikey || apikey === "") {
+      config.nodemc.apikey = apikey = uuid.v4()
     }
 
-    return res.error("is_not_first_run", {
-      moreinfo: "The server has been run before!"
-    });
+    return res.send(apikey);
   });
 
   return Router;
