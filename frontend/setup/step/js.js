@@ -53,6 +53,7 @@ function submitinfo() {
             nmc_port: localStorage.getItem("nodemc_port"),
             mc_port: localStorage.getItem("minecraft_port"),
             memory: localStorage.getItem("memory"),
+            apikey: localStorage.getItem("apikey"),
             directory: localStorage.getItem("directory"),
             version: localStorage.getItem("version"),
             flavour: localStorage.getItem("flavour")
