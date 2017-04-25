@@ -15,8 +15,8 @@ module.exports = (Router, server) => {
    * Verify if API key is valid or not.
    **/
   Router.post("/verify", (req, res) => {
-    let apikey = server.config.nodemc.apikey;
-    let check  = req.body.apikey || req.get("Authentication");
+    const apikey = server.config.nodemc.apikey;
+    const check  = req.body.apikey || req.get("Authentication");
 
     if(check === apikey) {
       return res.success(true);
