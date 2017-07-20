@@ -46,7 +46,6 @@ module.exports = (Router, server) => {
             version: req.body.version || "latest"
           },
           nodemc: {
-            apikey: req.body.apikey,
             version: config.nodemc.version,
             port: parseInt(req.body.nmc_port, 10),
             logDirectory: "./nodemc/logs"
@@ -81,7 +80,7 @@ module.exports = (Router, server) => {
         // Download a server jar.
         serverjar(jar, ver, dir)
           .then(() => {
-            details.minecraft.jarfile = jar + "." + ver + ".jar";
+            details.minecraft.jarfile = `${jar}.${ver}.jar`;
             return next();
           })
           .catch(err => {
