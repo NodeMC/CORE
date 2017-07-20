@@ -101,13 +101,6 @@ const init = async () => {
     app.use("/", express.static(dashboard.dashboard));
   }
 
-  // Check dashboard version
-  const data = await fs.readFile(path.join(dashboard.dashboard, "compat.txt"));
-  if(!semver.satisfies(config.nodemc.version.rest, data)) {
-    console.error("The installed dashboard does not appear to support this version of NodeMC!".red);
-    console.error("You may encounter issues with this dashboard - if so, please report this to the dashboard's developer.".red);
-  }
-
   app.use(cors());
   app.use(bodyP.json());
   app.use(bodyP.urlencoded({

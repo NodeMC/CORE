@@ -12,12 +12,14 @@
     "dir": "^0.1.2",
     "express": "^4.13.3",
     "file-stream-rotator": "^0.1.0",
-    "fs-extra": "^2.1.2",
+    "fs-extra": "^4.0.0",
     "fs-promise": "^2.0.2",
     "mkdirp": "^0.5.1",
     "mocha": "^3.2.0",
     "morgan": "^1.6.1",
     "node-ipc": "^9.0.1",
+    "passport": "^0.3.2",
+    "passport-hawk": "^3.0.0",
     "properties-reader": "0.0.15",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.3",
@@ -27,13 +29,13 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
-    "chai": "^3.5.0",
-    "eslint": "^3.19.0",
-    "mocha-eslint": "^3.0.1",
+    "chai": "^4.1.0",
+    "eslint": "^4.2.0",
+    "mocha-eslint": "^4.0.0",
     "supertest": "^3.0.0"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "yarn global add nodemon; nodemon server.js",
     "test": "node_modules/.bin/mocha test/001_env.js test/002_eslint.js test/v2/*.js"
   },
   "repository": {

@@ -63,9 +63,8 @@ module.exports = (Router, server) => {
        **/
       (next) => {
         fs.exists(details.minecraft.dir, exists => {
-          if(!exists) {
-            return mkdirp(details.minecraft.dir, next);
-          }
+          if(!exists) return mkdirp(details.minecraft.dir, next);
+
 
           return next();
         });

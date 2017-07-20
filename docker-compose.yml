@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+
+  backend:
+    build: .
+    environment:
+      DEBUG: "nodemc:*"
+    volumes:
+      - ./:/CORE
+    ports:
+      - 8081:80
+
+  arangodb:
+    image: arangodb/arangodb
+    environment:
+      ARANGO_ROOT_PASSWORD: supersecretpassword
