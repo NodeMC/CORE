@@ -11,6 +11,7 @@
     "cors": "^2.7.1",
     "debug": "^2.6.3",
     "dir": "^0.1.2",
+    "dockerode": "^2.5.0",
     "express": "^4.13.3",
     "file-stream-rotator": "^0.1.0",
     "fs-extra": "^4.0.0",
