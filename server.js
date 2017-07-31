@@ -1,25 +1,9 @@
 /**
- * This is the sourcecode for the NodeMC control
- * panel software - it is a web server that runs on a specific
- * port.
+ * NodeMC - Let's go to space!
  *
- * If you have any questions feel free to ask either on Github or
- * email: gabriel@nodemc.space!
- *
- * (c) Gabriel Simmer 2016
- *
- * Todo:
- * md5sum check for jarfiles
- * File uploading from HTML5 dashboard
- * Self-updater (possible?)
- * Support for other flavours of Minecraft server
- * General dashboard overhaul for sleeker appearence
- *     - Server stats
- *     - Other info on index.html
- *
- * @author Gabriel Simmer <gabreil@nodemc.space>
- * @version 1.0.0
- * @license GPL3
+ * @author NodeMC Team <https://github.com/nodemc>
+ * @version 6.0
+ * @license MIT
  **/
 
 "use strict";
@@ -43,11 +27,7 @@ const bodyP             = require("body-parser");
 const normalize         = require("./lib/normalize.js");
 
 // Internal Modules.
-const Server            = require("./lib/wrapper/server.js");
 const Routes            = require("./lib/express.js");
-const Update            = require("./lib/autoupdate.js");
-const PluginLoader      = require("./lib/plugin/loader.js");
-const PluginAPI         = require("./lib/plugin/api.js");
 const Logger            = require("./lib/logger.js");
 
 // config for now.
@@ -77,11 +57,6 @@ const init = async () => {
 
   // instance the server
   let app = new express();
-  let server = new Server(config)
-  let updater = new Update();
-
-  // Check NodeMC version.
-  updater.checkVersion(config.nodemc.version.core);
 
   // Extra fs call, but doesn't require logic.
   mkdirp.sync(logDirectory);
@@ -112,15 +87,16 @@ const init = async () => {
   }));
 
   // Build the Express Routes.
-  let routes = new Routes(app, server, config.nodemc.version.rest, require("debug")("nodemc:express"));
+  let routes = new Routes(app, {
+    config: config
+  }, config.nodemc.version.rest, require("debug")("nodemc:express"));
 
   console.log(`NodeMC started on :${config.nodemc.port}`)
   routes.start(config.nodemc.port);
-
-  // Initialise plugin system
-  let pLogger = new Logger("plugins"),
-    pAPI = new PluginAPI.PluginAPI(pLogger),
-    pLoader = new PluginLoader(pLogger, pAPI);
 }
 
 init();
+
+process.on('unhandledRejection', reason => {
+  console.log('Unhandled Promise Rejection', reason)
+});
