@@ -47,9 +47,9 @@ Then navigate to `http://localhost:3000` and go through the setup process.
 
 ## Maintainers
 
-[![Jared Allard](https://avatars.githubusercontent.com/u/2391349?s=130)](https://jaredallard.me/) | [![Mathew Da Costa](https://avatars3.githubusercontent.com/u/1917406?v=4&s=130)](https://github.com/md678685) |
----|---|---|---
-[Jared Allard](https://github.com/jaredallard) | [Mathew Da Costa](https://github.com/md678685)
+| [![Jared Allard](https://avatars.githubusercontent.com/u/2391349?s=130)](https://jaredallard.me/) | [![Mathew Da Costa](https://avatars3.githubusercontent.com/u/1917406?v=4&s=130)](https://github.com/md678685) |
+|---|---|
+|[Jared Allard](https://github.com/jaredallard) | [Mathew Da Costa](https://github.com/md678685) |
 
 
 Contributions from other developers are welcome, check out [CONTRIBUTING.md](https://github.com/nodemc/CORE/tree/master/.github/CONTRIBUTING.md) before you submit a pull request.
