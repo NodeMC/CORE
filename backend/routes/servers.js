@@ -7,14 +7,12 @@
 
 "use strict";
 
-const authCheck = require("../../lib/auth.js");
 const express = require("express");
 const fs = require("fs");
 
 module.exports = (baseRouter, server) => {
   let Router = express.Router();
 
-  baseRouter.use(authCheck(server));
   baseRouter.use("/0", Router);
 
   /**

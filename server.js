@@ -14,10 +14,8 @@ require("colors")
 // Requires
 const path              = require("path");
 const express           = require("express");
-const fs                = require("fs-promise");
 const mkdirp            = require("mkdirp");
 const FileStreamRotator = require("file-stream-rotator");
-const semver            = require("semver");
 const debug             = require("debug")("nodemc:server")
 
 // Express JS Modules
@@ -28,13 +26,12 @@ const normalize         = require("./lib/normalize.js");
 
 // Internal Modules.
 const Routes            = require("./lib/express.js");
-const Logger            = require("./lib/logger.js");
 
 // config for now.
 const config      = require("./config/config.js")
 
-console.log("By default NodeMC doesn\'t output to console.")
-console.log("You can view it\'s inner debugging, with DEBUG='nodemc:<component>'")
+console.log("By default NodeMC doesn't output to console.")
+console.log("You can view it's inner debugging, with DEBUG='nodemc:<component>'")
 console.log("or enable all debug output with DEBUG='nodemc:*'\n")
 
 // async wrapper
@@ -97,6 +94,6 @@ const init = async () => {
 
 init();
 
-process.on('unhandledRejection', reason => {
-  console.log('Unhandled Promise Rejection', reason)
+process.on("unhandledRejection", reason => {
+  console.log("Unhandled Promise Rejection", reason)
 });

@@ -7,22 +7,16 @@
 
 "use strict";
 
-module.exports = (Router, server) => {
+module.exports = (Router, options) => {
+  const passport = options.passport;
 
   /**
    * POST /verify
    *
    * Verify if API key is valid or not.
    **/
-  Router.post("/verify", (req, res) => {
-    const apikey = server.config.nodemc.apikey;
-    const check  = req.body.apikey || req.get("Authentication");
-
-    if(check === apikey) {
-      return res.success(true);
-    }
-
-    return res.error("invalid_authentication", "Invalid API Key");
+  Router.post("/verify", passport.authenticate("api-auth", { session: false }), (req, res) => {
+    return res.success("Authenticated!")
   });
 
   return Router;

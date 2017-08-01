@@ -20,27 +20,28 @@
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/en/) >= 7.0.0
-
-- [Yarn](https://yarnpkg.com)
-
 - [Docker](https://docker.io)
+
+- **docker-compose** (usually included with Docker)
 
 
 ## Running
 
 Running NodeMC is easy.
 
+**DO NOT RUN `npm install`, INSTEAD REBUILD CONTAINER.**
+
+`docker-compose build` is your friend.
+
 ```bash
 git clone https://github.com/NodeMC/CORE.git NodeMC
 
 cd NodeMC
 
-yarn
-
 cp config/config.example.js config/config.js
 
-node server.js
+docker-compose up
+
 ```
 
 Then navigate to `http://localhost:3000` and go through the setup process.
@@ -60,4 +61,4 @@ Various OSS modules are used in this project, please check `package.json` for th
 
 ## License
 
-GNU GPL3
+MIT

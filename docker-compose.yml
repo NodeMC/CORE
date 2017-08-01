@@ -13,5 +13,7 @@ services:
 
   arangodb:
     image: arangodb/arangodb
+    ports:
+      - 8529:8529
     environment:
       ARANGO_ROOT_PASSWORD: supersecretpassword
