@@ -15,15 +15,15 @@ const scrypt   = require("scrypt")
 let db              = new Database()
 db.connect("users")
 
-module.exports = (Router, options) => {
-  const passport = options.passport;
+module.exports = (Router, opts) => {
+  const passport = opts.passport;
 
   /**
    * GET /status
    *
    * Verify if API key is valid or not.
    **/
-  Router.get("/status", passport.authenticate("api-auth", { session: false }), (req, res) => {
+  Router.get("/status", opts.requiresAuth, (req, res) => {
     return res.success()
   });
 
