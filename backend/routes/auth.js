@@ -16,8 +16,6 @@ let db              = new Database()
 db.connect("users")
 
 module.exports = (Router, opts) => {
-  const passport = opts.passport;
-
   /**
    * GET /status
    *
