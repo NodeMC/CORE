@@ -10,6 +10,7 @@
 const debug    = require("debug")("nodemc:auth")
 const Database = require("../../lib/db.js")
 const scrypt   = require("scrypt")
+const random   = require("crypto-promise").randomBytes
 
 // setup db
 let db              = new Database()
@@ -50,7 +51,33 @@ module.exports = (Router, opts) => {
     }
   })
 
+  /**
+   * GET /bewit
+   *
+   * Return a ONE TIME USE (TIME LIMITED) token.
+   */
+  Router.get("/bewit", opts.requiresAuth, async (req, res) => {
+    const randomBytes = await random(32)
 
+    const bewit       = randomBytes.toString("base64")
+    const created_at  = Date.now()
+    const valid       = 200000      // VALID ONLY FOR 200ms.
+
+    const bewitObject = {
+      bewit,
+      created_at,
+      valid
+    }
+
+    try {
+      await db.create("bewit", bewitObject, false)
+    } catch(e) {
+      debug("bewit:save:error", e)
+      return res.error("Failed to create token.")
+    }
+
+    return res.success(bewitObject)
+  })
 
   return Router;
 };
