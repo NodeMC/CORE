@@ -24,5 +24,15 @@ module.exports = (Router, opts) => {
 
   })
 
+  /**
+   * DELETE / - formally delete a scheduler instance.
+   */
+  Router.delete("/", (req, res) => {
+
+  })
+
+  // TODO map out the actual design for schedulers.
+  // Maybe use some sort of job queue? Kue (redis)?
+
   return Router
 };
