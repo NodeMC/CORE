@@ -17,7 +17,7 @@
     "file-stream-rotator": "^0.2.0",
     "fs-extra": "^4.0.2",
     "mkdirp": "^0.5.1",
-    "mocha": "^3.5.3",
+    "mocha": "^4.0.0",
     "morgan": "^1.9.0",
     "passport": "^0.4.0",
     "passport-hawk": "^3.0.0",
