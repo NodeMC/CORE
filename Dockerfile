@@ -20,6 +20,17 @@ RUN apk upgrade --no-cache --no-self-upgrade --available
 COPY ./docker-entrypoint.sh /usr/bin/docker-entrypoint
 RUN chmod +x /usr/bin/docker-entrypoint
 
+# Run dos2unix on the entrypoint, which fixes shell scripts.
+# NOTE: This may break in the future if we use more shell scripts.
+#       For some reason it can't process dos2unix *, and errors with:
+#
+#       dos2unix: No such file or directory '*'
+#
+#       Wrapping it in sh -c "dos2unix *" doesn't fix this, so it's most
+#       likely the binary that's not supporting wildcards... installing a
+#       non-busybox version of dos2unix may fix this in the future.
+RUN dos2unix -u /usr/bin/docker-entrypoint
+
 # Cleanup.
 # RUN apk purge --no-cache make automake autoconf python g++
 
