@@ -61,7 +61,7 @@ module.exports = (Router, opts) => {
 
     const bewit       = randomBytes.toString("base64")
     const created_at  = Date.now()
-    const valid       = 200000      // VALID ONLY FOR 200ms.
+    const valid       = 300000      // VALID ONLY FOR 5 MINUTES.
 
     const bewitObject = {
       bewit,
