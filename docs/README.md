@@ -16,7 +16,7 @@ All docs must be written in [Markdown](<link>), you can see the structure below:
 
 DESCRIPTION OF ENDPOINT
 
-## /METHOD
+## HTTP METHOD /ENDPOINT (DO NOT INCLUDE BASE API ENDPOINT)
 
 [METHOD SPECIFIC BADGES]
 

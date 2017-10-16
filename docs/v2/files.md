@@ -1,10 +1,13 @@
 # /files Endpoint
 
-![authenticated:true](https://img.shields.io/badge/authenticated-true-green.svg?style=flat-square)
+![authenticated:true](https://img.shields.io/badge/authenticated-true-green.svg?style=flat-square) ![status:not-implemented](https://img.shields.io/badge/status-not--implemented-red.svg?style=flat-square)
+
 
 Download / Manage files on the Minecraft server.
 
-## GET /:path
+**NOTE** All endpoints require you specify `:instance`.
+
+## GET /:instance/:path
 
 Get the contents of `:path` if it's a file, or return an array of it's contents
 if it's a directory.
@@ -28,9 +31,7 @@ File response: (with guessed MIME Type)
 DJFgrkelnwlfrnlnfkjrnjw file
 ```
 
-## PUT /:path
-
-![status:not-implemented](https://img.shields.io/badge/status-not--implemented-red.svg?style=flat-square)
+## PUT /:instance/:path
 
 **NOTICE:** This must be a `multipart/form-data` request, just like a normal file
 upload.
@@ -42,7 +43,7 @@ of the minecraft dir.
 // success or error, see README.md. Empty response.
 ```
 
-## DELETE /:path
+## DELETE /:instance/:path
 
 Delete file or directory at `:path`.
 
