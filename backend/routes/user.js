@@ -18,7 +18,7 @@ let db              = new Database()
 db.connect("users")
 
 
-module.exports = (Router, options) => {
+module.exports = (Router, opts) => {
 
   /**
    * POST /
@@ -58,6 +58,57 @@ module.exports = (Router, options) => {
 
     return res.success("USER_CREATED")
   });
+
+  /**
+   * PATCH /:user
+   *
+   * Update a user.
+   */
+  Router.patch("/:user/", opts.requiresAuth, async (req, res) => {
+    await scrypt.params(0.1)
+
+    const user = req.params.user;
+
+    const updated = {
+      username: req.body.username,
+      password: req.body.password ?
+        (await scrypt.kdf(req.body.password, scryptParams)).toString("base64") : undefined
+    }
+
+    const collection = await db._collection("users")
+    const cursor = await db.find("users", "username", user)
+  
+    if (cursor.count !== 1) return res.error("User not found")
+  
+    const userDoc = await cursor.next()
+
+    try {
+      await db.exists("users", "username", updated.username)
+    } catch (e) {
+      debug("update", e)
+      return res.error("Username already exists")
+    }
+    
+    await collection.update(userDoc, updated)
+    return res.success("USER_UPDATED")
+  })
+
+  Router.delete("/:user/", opts.requiresAuth, async (req, res) => {
+    try {
+      const cursor = await db.find("users", "username", req.params.user)
+
+      if (cursor.count !== 1) return res.error("User not found")
+
+      const user = await cursor.next()
+
+      await db.delete(user._id)
+    } catch (e) {
+      debug("delete", e)
+      return res.error("User deletion failed")
+    }
+
+    return res.success("USER_DELETED")
+  })
 
   return Router;
 };
