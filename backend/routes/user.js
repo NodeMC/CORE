@@ -18,7 +18,7 @@ let db              = new Database()
 db.connect("users")
 
 
-module.exports = (Router, options) => {
+module.exports = (Router, opts) => {
 
   /**
    * POST /
@@ -58,6 +58,23 @@ module.exports = (Router, options) => {
 
     return res.success("USER_CREATED")
   });
+
+  Router.delete("/:user/", opts.requiresAuth, async (req, res) => {
+    try {
+      const cursor = await db.find("users", "username", req.params.user)
+
+      if (cursor.count !== 1) return res.error("User not found")
+
+      const user = await cursor.next()
+
+      await db.delete(user._id)
+    } catch (e) {
+      debug("delete", e)
+      return res.error("User deletion failed")
+    }
+
+    return res.success("USER_DELETED")
+  })
 
   return Router;
 };
