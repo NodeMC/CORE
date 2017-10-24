@@ -8,6 +8,7 @@ services:
       DEBUG: "nodemc:*"
     volumes:
       - ./:/CORE
+      - /CORE/node_modules
     ports:
       - 8081:80
 
