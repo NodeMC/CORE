@@ -40,13 +40,13 @@ Example Response
 }
 ```
 
-# PUT /:username - Update the user's information.
+# PATCH /:username - Update the user's information.
 
 ![authenticated:true](https://img.shields.io/badge/authenticated-true-green.svg?style=flat-square) ![status:not-implemented](https://img.shields.io/badge/status-not--implemented-red.svg?style=flat-square)
 
 Update `:username`'s information.
 
-Example POST body
+Example PATCH body
 
 ```js
   {
