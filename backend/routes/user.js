@@ -70,7 +70,7 @@ module.exports = (Router, opts) => {
     const user = req.params.user;
 
     const updated = {
-      username: req.body.username,
+      username: req.body.username || user,
       password: req.body.password ?
         (await scrypt.kdf(req.body.password, scryptParams)).toString("base64") : undefined
     }
@@ -78,18 +78,21 @@ module.exports = (Router, opts) => {
     const collection = await db._collection("users")
     const cursor = await db.find("users", "username", user)
   
-    if (cursor.count !== 1) return res.error("User not found")
+    if (cursor.count < 1) return res.error("User not found")
   
     const userDoc = await cursor.next()
 
     try {
       await db.exists("users", "username", updated.username)
+      await collection.update(userDoc, updated)
     } catch (e) {
+      if (e.message === "EXISTS") {
+        return res.error("Username already exists")
+      }
       debug("update", e)
-      return res.error("Username already exists")
+      return res.error("User update failed")
     }
     
-    await collection.update(userDoc, updated)
     return res.success("USER_UPDATED")
   })
 
