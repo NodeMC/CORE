@@ -40,7 +40,7 @@
     "no-sync": 1,
     /* Stylistic Issues */
     "no-mixed-spaces-and-tabs": 2,
-    "no-underscore-dangle": 2,
+    "no-underscore-dangle": 0,
     "quotes": [2, "double", "avoid-escape"],
   },
   "extends": "eslint:recommended"
