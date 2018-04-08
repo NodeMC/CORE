@@ -7,28 +7,26 @@
 
 "use strict";
 
-const debug    = require("debug")("nodemc:scheduler")
 const Database = require("../../lib/db.js")
-const scrypt   = require("scrypt")
 
 // setup db
 let db              = new Database()
 db.connect("users")
 
-module.exports = (Router, opts) => {
+module.exports = (Router) => {
 
   /**
    * PUT / - register a scheduler
    */
   Router.put("/", (req, res) => {
-
+    return res.send()
   })
 
   /**
    * DELETE / - formally delete a scheduler instance.
    */
   Router.delete("/", (req, res) => {
-
+    return res.send()
   })
 
   // TODO map out the actual design for schedulers.
