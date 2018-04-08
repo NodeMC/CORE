@@ -7,7 +7,7 @@
     "arangojs": "^5.7.0",
     "async": "^2.5.0",
     "body-parser": "^1.18.2",
-    "bufferutil": "*",
+    "bufferutil": "^3.0.4",
     "colors": "^1.1.2",
     "cors": "^2.8.4",
     "crypto-promise": "^2.0.0",
@@ -23,8 +23,8 @@
     "passport-hawk": "^3.0.0",
     "scrypt": "^6.0.3",
     "semver": "^5.4.1",
-    "utf-8-validate": "*",
-    "ws": "*"
+    "utf-8-validate": "^4.0.1",
+    "ws": "^5.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
