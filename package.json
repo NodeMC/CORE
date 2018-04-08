@@ -27,7 +27,7 @@
     "ws": "*"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.1",
+    "babel-eslint": "^8.2.2",
     "chai": "^4.1.2",
     "eslint": "^4.7.2",
     "mocha-eslint": "^4.1.0",
