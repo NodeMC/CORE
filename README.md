@@ -12,6 +12,8 @@
 
 ## Helpful Links
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/NodeMC/CORE.svg)](https://greenkeeper.io/)
+
 [Official Documentation](https://nodemc.space/docs)
 
 [Official Website](https://nodemc.space)
