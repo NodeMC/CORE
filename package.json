@@ -10,7 +10,7 @@
     "colors": "^1.1.2",
     "cors": "^2.8.4",
     "crypto-promise": "^2.0.0",
-    "debug": "^3.1.0",
+    "debug": "^4.0.0",
     "express": "^4.16.0",
     "file-stream-rotator": "^0.2.0",
     "mkdirp": "^0.5.1",
