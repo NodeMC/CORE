@@ -4,7 +4,7 @@
   "description": "minecraft server control panel made in nodejs",
   "main": "server.js",
   "dependencies": {
-    "arangojs": "^6.2.3",
+    "arangojs": "^6.9.0",
     "async": "^2.5.0",
     "body-parser": "^1.18.2",
     "colors": "^1.1.2",
