@@ -78,6 +78,11 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@types/node@*":
+  version "12.7.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.3.tgz#27b3f40addaf2f580459fdb405222685542f907a"
+  integrity sha512-3SiLAIBkDWDg6vFo0+5YJyHPWU9uwu40Qe+v+0MH8wRKYBimHvvAOyk3EzMrD/TrIlLYfXrqDqrg913PynrMJQ==
+
 accepts@~1.3.5:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/accepts/-/accepts-1.3.5.tgz#eb777df6011723a3b14e8a72c0805c8e86746bd2"
@@ -134,14 +139,15 @@ ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-arangojs@^6.2.3:
-  version "6.2.3"
-  resolved "https://registry.yarnpkg.com/arangojs/-/arangojs-6.2.3.tgz#3685a9e70005a92a4dc639394f622c79eb336385"
+arangojs@^6.11.1:
+  version "6.11.1"
+  resolved "https://registry.yarnpkg.com/arangojs/-/arangojs-6.11.1.tgz#79521346a2e545a29cb2e607caae2ca17c30c172"
+  integrity sha512-r5jx0OI8OTMsAeZjUmXsvI1h9JldeKh8pZlYH/qgOzy6q9TGyEElM4pMQ9wurLwL8DVsPToXx8JB5GpEEH3Irg==
   dependencies:
+    "@types/node" "*"
     es6-error "^4.0.1"
     linkedlist "^1.0.1"
     multi-part "^2.0.0"
-    utf8-length "^0.0.1"
     xhr "^2.4.1"
 
 argparse@^1.0.7:
@@ -1574,10 +1580,6 @@ typedarray@^0.0.6:
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
-
-utf8-length@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/utf8-length/-/utf8-length-0.0.1.tgz#d315c4bed529c977f18dd35c73d72628327d9ada"
 
 util-deprecate@~1.0.1:
   version "1.0.2"
