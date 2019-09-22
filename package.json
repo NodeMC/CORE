@@ -7,7 +7,7 @@
     "arangojs": "^6.2.3",
     "async": "^2.5.0",
     "body-parser": "^1.18.2",
-    "colors": "^1.1.2",
+    "colors": "^1.4.0",
     "cors": "^2.8.4",
     "crypto-promise": "^2.0.0",
     "debug": "^3.1.0",
